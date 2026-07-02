@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { impliedVol, type OptionType } from "../lib/blackScholes";
 import { fmt, fmtPct } from "../lib/format";
-import { IconTarget } from "./icons";
 
 export interface AppInputs {
   S: number;
@@ -134,9 +133,8 @@ export function InputsPanel({ inputs, onChange }: Props) {
       </div>
 
       <div className="p-3">
-        <div className="mb-1.5 flex items-center gap-1.5">
-          <IconTarget className="text-faint" width={12} height={12} />
-          <span className="lbl">Implied vol</span>
+        <div className="mb-1.5">
+          <span className="lbl">Implied volatility</span>
         </div>
         <div className="flex items-stretch gap-1">
           <div className="flex flex-1 items-center gap-1 border border-edge bg-term px-2 focus-within:border-edge2">

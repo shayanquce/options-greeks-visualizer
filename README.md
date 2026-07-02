@@ -1,8 +1,9 @@
-# Options Greeks Visualizer
+# The Greeks: an options risk visualizer
 
-An interactive **Black-Scholes-Merton** pricing and Greeks visualizer, styled after a
-trading terminal. Built with React + TypeScript, with the quantitative engine fully
-separated from the UI and unit-tested against textbook reference values.
+An interactive **Black-Scholes-Merton** pricing and Greeks visualizer with a
+print-inspired, research-note interface. Built with React + TypeScript, with the
+quantitative engine fully separated from the UI and unit-tested against textbook
+reference values.
 
 **Features**
 
@@ -61,8 +62,8 @@ Put  = K·e^(−rT)·N(−d₂) − S·e^(−qT)·N(−d₁)
 
 All Greeks are implemented in closed form (see
 [`src/lib/blackScholes.ts`](src/lib/blackScholes.ts): every formula is written out in
-the comments). Display conventions follow desk practice: **theta per calendar day**,
-**vega and rho per 1 percentage point**.
+the comments). Display conventions follow desk practice: **theta and charm per
+calendar day**, **vega, rho, vanna, and vomma per 1 percentage point**.
 
 | Greek | Symbol | Definition | Intuition |
 | --- | --- | --- | --- |

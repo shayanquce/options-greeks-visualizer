@@ -222,7 +222,7 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
             ["Net Θ/day", net.theta / 365, 4],
             ["Net ν/1%", net.vega / 100, 4],
             ["Net ρ/1%", net.rho / 100, 4],
-            ["Net Vanna", net.vanna, 4],
+            ["Net Vanna/1%", net.vanna / 100, 4],
             ["Net Vomma/1%", net.vomma / 100, 4],
           ] as const
         ).map(([label, v, dp]) => (
@@ -261,10 +261,10 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
             <ComposedChart data={data} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
               <defs>
                 <linearGradient id="stratFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset={0} stopColor={CHART.up} stopOpacity={0.28} />
-                  <stop offset={zeroOffset} stopColor={CHART.up} stopOpacity={0.03} />
-                  <stop offset={zeroOffset} stopColor={CHART.down} stopOpacity={0.03} />
-                  <stop offset={1} stopColor={CHART.down} stopOpacity={0.28} />
+                  <stop offset={0} stopColor={CHART.up} stopOpacity={0.2} />
+                  <stop offset={zeroOffset} stopColor={CHART.up} stopOpacity={0.04} />
+                  <stop offset={zeroOffset} stopColor={CHART.down} stopOpacity={0.04} />
+                  <stop offset={1} stopColor={CHART.down} stopOpacity={0.2} />
                 </linearGradient>
               </defs>
               <CartesianGrid stroke={CHART.grid} vertical={false} />

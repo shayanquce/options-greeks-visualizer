@@ -92,10 +92,10 @@ export function PayoffChart({ inputs }: { inputs: AppInputs }) {
           <ComposedChart data={data} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
             <defs>
               <linearGradient id="pnlFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset={0} stopColor={CHART.up} stopOpacity={0.28} />
-                <stop offset={zeroOffset} stopColor={CHART.up} stopOpacity={0.03} />
-                <stop offset={zeroOffset} stopColor={CHART.down} stopOpacity={0.03} />
-                <stop offset={1} stopColor={CHART.down} stopOpacity={0.28} />
+                <stop offset={0} stopColor={CHART.up} stopOpacity={0.2} />
+                <stop offset={zeroOffset} stopColor={CHART.up} stopOpacity={0.04} />
+                <stop offset={zeroOffset} stopColor={CHART.down} stopOpacity={0.04} />
+                <stop offset={1} stopColor={CHART.down} stopOpacity={0.2} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke={CHART.grid} vertical={false} />
@@ -109,7 +109,7 @@ export function PayoffChart({ inputs }: { inputs: AppInputs }) {
               tickLine={false}
               tickCount={10}
               label={{
-                value: "spot at expiry",
+                value: "underlying price",
                 position: "insideBottomRight",
                 offset: -2,
                 fill: CHART.faint,

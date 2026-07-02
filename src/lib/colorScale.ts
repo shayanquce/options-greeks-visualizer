@@ -1,35 +1,37 @@
 /**
- * Color scales for the Greek surface heatmap.
- * Terminal-style ramps: no purple/magenta plasma colormap.
+ * Color scales for the Greek surface heatmap, tuned for the paper-light
+ * theme: values ramp from the page ground into saturated print inks.
  */
 
 type Rgb = [number, number, number];
 
+/** Sequential: paper -> gold -> sienna -> dark umber. */
 const SEQ: Rgb[] = [
-  [12, 12, 12],
-  [22, 28, 38],
-  [38, 52, 72],
-  [72, 88, 108],
-  [120, 100, 72],
-  [180, 120, 48],
-  [224, 140, 32],
-  [240, 180, 100],
+  [242, 239, 230],
+  [235, 220, 184],
+  [224, 190, 130],
+  [204, 148, 80],
+  [168, 99, 48],
+  [122, 64, 30],
+  [72, 39, 20],
 ];
 
+/** Diverging negative side: paper -> deep slate blue. */
 const DIV_NEG: Rgb[] = [
-  [12, 12, 12],
-  [20, 32, 48],
-  [40, 68, 96],
-  [80, 120, 148],
-  [140, 170, 190],
+  [242, 239, 230],
+  [209, 216, 216],
+  [156, 180, 193],
+  [99, 136, 163],
+  [47, 87, 120],
 ];
 
+/** Diverging positive side: paper -> brick red. */
 const DIV_POS: Rgb[] = [
-  [12, 12, 12],
-  [48, 32, 20],
-  [100, 64, 32],
-  [180, 110, 40],
-  [230, 170, 90],
+  [242, 239, 230],
+  [233, 208, 186],
+  [216, 162, 129],
+  [187, 111, 79],
+  [146, 61, 44],
 ];
 
 function lerpRamp(ramp: Rgb[], t: number): string {

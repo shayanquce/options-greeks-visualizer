@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { greeks } from "./lib/blackScholes";
+import { greeks, type OptionType } from "./lib/blackScholes";
 import { fmt, fmtPct } from "./lib/format";
 import { GreeksCard } from "./components/GreeksCard";
 import { InputsPanel, type AppInputs } from "./components/InputsPanel";
@@ -8,19 +8,12 @@ import { PayoffChart } from "./components/PayoffChart";
 import { GreekSurface } from "./components/GreekSurface";
 import { TimeDecay } from "./components/TimeDecay";
 import { StrategyBuilder } from "./components/StrategyBuilder";
-import { IconClock, IconCurves, IconGrid, IconHelp, IconLayers, IconLinkedIn, IconPayoff } from "./components/icons";
+import { IconLinkedIn } from "./components/icons";
 import { GreeksGlossary } from "./components/GreeksGlossary";
 import { HelpModal } from "./components/HelpModal";
 import { Logo } from "./components/Logo";
-import type { JSX } from "react";
 
-const TABS: { id: Tab; icon: (p: { className?: string }) => JSX.Element }[] = [
-  { id: "Greek Curves", icon: IconCurves },
-  { id: "Payoff", icon: IconPayoff },
-  { id: "Surface", icon: IconGrid },
-  { id: "Time Decay", icon: IconClock },
-  { id: "Strategy", icon: IconLayers },
-];
+const TABS: Tab[] = ["Greek Curves", "Payoff", "Surface", "Time Decay", "Strategy"];
 type Tab = "Greek Curves" | "Payoff" | "Surface" | "Time Decay" | "Strategy";
 
 const TAB_HINTS: Record<Tab, string> = {
@@ -36,15 +29,20 @@ const TAB_HINTS: Record<Tab, string> = {
     "Combine multiple options into one position. Pick a preset or build your own legs and see net Greeks and P&L.",
 };
 
-function MoneynessBadge({ m }: { m: number }) {
-  const [label, cls, title] =
-    m > 1.02
+/**
+ * Moneyness depends on the option type: a call is ITM when S > K, a put when
+ * S < K. Within +/-2% of the strike we call it ATM.
+ */
+function MoneynessBadge({ m, type }: { m: number; type: OptionType }) {
+  const near = m > 0.98 && m < 1.02;
+  const itm = type === "call" ? m >= 1.02 : m <= 0.98;
+  const [label, cls, title] = near
+    ? ["ATM", "text-accent", "At the money: spot is near the strike"]
+    : itm
       ? ["ITM", "text-up", "In the money: the option has intrinsic value"]
-      : m < 0.98
-        ? ["OTM", "text-down", "Out of the money: no intrinsic value yet"]
-        : ["ATM", "text-accent", "At the money: spot is near the strike"];
+      : ["OTM", "text-down", "Out of the money: no intrinsic value yet"];
   return (
-    <span className={`text-[10px] font-medium ${cls}`} title={title}>
+    <span className={`text-[10px] font-semibold ${cls}`} title={title}>
       {label}
     </span>
   );
@@ -82,40 +80,43 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="flex items-center gap-3 border-b border-edge bg-panel px-4 py-2">
-        <Logo className="shrink-0 text-accent" />
+      <header className="flex items-center gap-3.5 border-b border-txt/80 bg-panel px-5 py-3">
+        <Logo className="shrink-0 text-txt" />
         <div className="leading-tight">
-          <h1 className="text-[13px] font-semibold text-txt">Options Greeks</h1>
-          <div className="text-[10px] text-faint">Learn how option prices and risk change with the market</div>
+          <h1 className="font-serif text-[19px] font-semibold tracking-tight text-txt">
+            The Greeks
+          </h1>
+          <div className="text-[11px] text-dim">
+            Option prices and risk under Black-Scholes-Merton
+          </div>
         </div>
 
         <button
           onClick={() => setHelpOpen(true)}
-          className="ml-4 flex items-center gap-1.5 border border-edge px-2.5 py-1 text-[10px] text-dim hover:border-edge2 hover:bg-panel2 hover:text-txt"
+          className="ml-5 border-b border-dotted border-faint pb-px text-[11px] text-dim hover:border-txt hover:text-txt"
         >
-          <IconHelp className="text-faint" />
           How it works
         </button>
 
-        <div className="tnum ml-auto hidden items-center gap-3 border border-edge bg-panel2 px-3 py-1 text-[11px] lg:flex">
+        <div className="tnum ml-auto hidden items-center gap-3 text-[11px] lg:flex">
           <span className="text-dim">
             {inputs.type === "call" ? (
-              <span className="text-up">CALL</span>
+              <span className="font-medium text-up">CALL</span>
             ) : (
-              <span className="text-down">PUT</span>
+              <span className="font-medium text-down">PUT</span>
             )}{" "}
             <span className="text-txt">{fmt(inputs.K, 0)}</span>
           </span>
-          <span className="h-3 w-px bg-edge" />
+          <span className="h-3 w-px bg-edge2" />
           <span className="text-dim">
             {inputs.days}<span className="text-faint">d</span>
           </span>
-          <span className="h-3 w-px bg-edge" />
+          <span className="h-3 w-px bg-edge2" />
           <span className="flex items-center gap-1.5 text-dim">
             S/K <span className="text-txt">{fmt(moneyness, 3)}</span>
-            <MoneynessBadge m={moneyness} />
+            <MoneynessBadge m={moneyness} type={inputs.type} />
           </span>
-          <span className="h-3 w-px bg-edge" />
+          <span className="h-3 w-px bg-edge2" />
           <span className="text-dim">
             σ <span className="text-txt">{fmtPct(inputs.sigma, 1)}</span>
           </span>
@@ -130,24 +131,26 @@ export default function App() {
         </aside>
 
         <main className="flex min-w-0 flex-1 flex-col">
-          <nav className="flex items-center border-b border-edge">
-            {TABS.map(({ id, icon: Icon }) => (
+          <nav className="flex items-center gap-1 border-b border-edge bg-panel px-2">
+            {TABS.map((id) => (
               <button
                 key={id}
                 onClick={() => setTab(id)}
-                className={`flex items-center gap-1.5 border-r border-edge px-3 py-2 text-[11px] font-medium ${
+                className={`relative px-3 py-2.5 text-[12px] ${
                   tab === id
-                    ? "bg-panel2 text-txt"
-                    : "bg-panel text-dim hover:bg-panel2 hover:text-txt"
+                    ? "font-semibold text-txt"
+                    : "text-dim hover:text-txt"
                 }`}
               >
-                <Icon className={tab === id ? "text-accent" : "text-faint"} />
                 {id}
+                {tab === id && (
+                  <span className="absolute inset-x-3 bottom-0 h-[2px] bg-accent" />
+                )}
               </button>
             ))}
           </nav>
 
-          <div className="border-b border-edge bg-panel2 px-3 py-1.5 text-[10px] leading-[1.5] text-dim">
+          <div className="border-b border-edge bg-panel2 px-4 py-1.5 text-[11px] italic leading-[1.5] text-dim">
             {TAB_HINTS[tab]}
           </div>
 
@@ -161,8 +164,8 @@ export default function App() {
         </main>
       </div>
 
-      <footer className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-edge px-4 py-2 text-[10px] text-faint">
-        <span>Educational tool, not investment advice.</span>
+      <footer className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-edge bg-panel px-5 py-2.5 text-[11px] text-faint">
+        <span className="italic">Educational tool, not investment advice.</span>
         <a
           href="https://www.linkedin.com/in/shayanmardaneh"
           target="_blank"

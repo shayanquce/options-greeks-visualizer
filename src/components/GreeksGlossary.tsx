@@ -6,7 +6,7 @@ interface Entry {
   symbol: string;
   name: string;
   formula: string;
-  order: "First" | "Second";
+  order: "Primary" | "Higher";
   color: string;
   summary: string;
   detail: string;
@@ -17,20 +17,20 @@ const ENTRIES: Entry[] = [
   {
     symbol: "Δ",
     name: "Delta",
-    formula: "dV / dS",
-    order: "First",
+    formula: "∂V/∂S",
+    order: "Primary",
     color: GK.delta,
     summary: "How much the option price moves when the stock moves $1.",
     detail:
-      "Delta is the first derivative of option value with respect to spot. For a call it ranges from 0 (far out of the money) to 1 (deep in the money). For a put it ranges from 0 to −1. Traders use delta as a hedge ratio: a call with delta 0.40 behaves roughly like owning 40 shares per contract (each contract covers 100 shares, so full exposure is 40 × 100 = 4,000 shares per contract in share-equivalent terms at the contract level shown here). Delta also approximates the probability of finishing in the money under the risk-neutral measure, which is why at-the-money calls often sit near 0.50.",
+      "Delta is the first derivative of option value with respect to spot. For a call it ranges from 0 (far out of the money) to 1 (deep in the money); for a put, from 0 to −1. Traders use delta as a hedge ratio: since one listed contract covers 100 shares, a call with delta 0.40 has the same first-order exposure as 40 shares of stock. Delta is often quoted as a rough proxy for the chance of expiring in the money, but the exact risk-neutral exercise probability is N(d2); delta itself is e^(−qT)·N(d1), which sits slightly above it. That is also why an at-the-money call's delta is a little over 0.50, not exactly 0.50.",
     example:
-      "You own a call with delta 0.55. The stock rises $2. The option price should increase by about 0.55 × $2 = $1.10 (before other effects). To stay delta-neutral, you would short 55 shares per contract.",
+      "You own a call with delta 0.55. The stock rises $2. The option price should increase by about 0.55 × $2 = $1.10 (before other effects). To stay delta-neutral, you would short 55 shares against the contract.",
   },
   {
     symbol: "Γ",
     name: "Gamma",
-    formula: "d²V / dS²",
-    order: "First",
+    formula: "∂²V/∂S²",
+    order: "Primary",
     color: GK.gamma,
     summary: "How much delta changes when the stock moves $1.",
     detail:
@@ -41,8 +41,8 @@ const ENTRIES: Entry[] = [
   {
     symbol: "Θ",
     name: "Theta",
-    formula: "dV / dt",
-    order: "First",
+    formula: "∂V/∂t",
+    order: "Primary",
     color: GK.theta,
     summary: "How much value the option loses each day from time passing.",
     detail:
@@ -53,8 +53,8 @@ const ENTRIES: Entry[] = [
   {
     symbol: "ν",
     name: "Vega",
-    formula: "dV / dσ",
-    order: "First",
+    formula: "∂V/∂σ",
+    order: "Primary",
     color: GK.vega,
     summary: "How much the option price moves when implied volatility rises 1%.",
     detail:
@@ -65,8 +65,8 @@ const ENTRIES: Entry[] = [
   {
     symbol: "ρ",
     name: "Rho",
-    formula: "dV / dr",
-    order: "First",
+    formula: "∂V/∂r",
+    order: "Primary",
     color: GK.rho,
     summary: "How much the option price moves when interest rates rise 1%.",
     detail:
@@ -77,8 +77,8 @@ const ENTRIES: Entry[] = [
   {
     symbol: "",
     name: "Vanna",
-    formula: "d²V / dS dσ",
-    order: "Second",
+    formula: "∂²V/∂S∂σ",
+    order: "Higher",
     color: GK.vanna,
     summary: "How delta changes when volatility moves, or how vega changes when spot moves.",
     detail:
@@ -89,8 +89,8 @@ const ENTRIES: Entry[] = [
   {
     symbol: "",
     name: "Charm",
-    formula: "dΔ / dt",
-    order: "Second",
+    formula: "∂Δ/∂t",
+    order: "Higher",
     color: GK.charm,
     summary: "How much delta drifts each day even if the stock price stays flat.",
     detail:
@@ -101,8 +101,8 @@ const ENTRIES: Entry[] = [
   {
     symbol: "",
     name: "Vomma",
-    formula: "d²V / dσ²",
-    order: "Second",
+    formula: "∂²V/∂σ²",
+    order: "Higher",
     color: GK.vomma,
     summary: "How much vega itself changes when volatility moves.",
     detail:
@@ -113,22 +113,32 @@ const ENTRIES: Entry[] = [
 ];
 
 export function GreeksGlossary() {
-  const firstOrder = ENTRIES.filter((e) => e.order === "First");
-  const secondOrder = ENTRIES.filter((e) => e.order === "Second");
+  const primary = ENTRIES.filter((e) => e.order === "Primary");
+  const higher = ENTRIES.filter((e) => e.order === "Higher");
 
   return (
-    <section className="border-t border-edge bg-panel px-4 py-6">
+    <section className="border-t border-edge bg-panel px-4 py-8">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-4">
-          <h2 className="text-[12px] font-semibold text-txt">Greeks reference</h2>
-          <p className="mt-0.5 text-[11px] leading-[1.5] text-dim">
+        <div className="mb-5">
+          <h2 className="font-serif text-[17px] font-semibold tracking-tight text-txt">
+            Greeks reference
+          </h2>
+          <p className="mt-1 text-[12px] leading-[1.5] text-dim">
             Plain summaries below. Click any Greek for a fuller explanation and a worked example.
           </p>
         </div>
 
-        <GreekGroup title="First-order" subtitle="how option value responds to one input" entries={firstOrder} />
-        <div className="mt-4">
-          <GreekGroup title="Second-order" subtitle="how a Greek itself changes" entries={secondOrder} />
+        <GreekGroup
+          title="The primary Greeks"
+          subtitle="the five standard sensitivities every options desk quotes"
+          entries={primary}
+        />
+        <div className="mt-5">
+          <GreekGroup
+            title="Higher-order Greeks"
+            subtitle="cross and second derivatives: how the Greeks themselves drift"
+            entries={higher}
+          />
         </div>
       </div>
     </section>
@@ -172,7 +182,7 @@ function GreekCard({ entry: e }: { entry: Entry }) {
         <span className="mt-0.5 h-3 w-0.5 shrink-0" style={{ background: e.color }} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[11px] text-faint">{e.symbol || e.name.charAt(0)}</span>
+            {e.symbol && <span className="font-mono text-[11px] text-faint">{e.symbol}</span>}
             <span className="text-[11px] font-medium text-txt">{e.name}</span>
             <span className="tnum ml-auto text-[10px] text-faint">{e.formula}</span>
           </div>

@@ -30,5 +30,6 @@ export function fmtTick(x: number): string {
   if (a >= 1) return x.toFixed(1);
   if (a === 0) return "0";
   if (a >= 0.01) return x.toFixed(2);
+  if (a >= 0.0005) return x.toFixed(3);
   return x.toExponential(1);
 }

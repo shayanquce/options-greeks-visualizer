@@ -166,13 +166,18 @@ export function price(type: OptionType, inputs: BsmInputs): number {
 export function greeks(type: OptionType, inputs: BsmInputs): Greeks {
   const { S, K, T, r, sigma, q } = inputs;
   if (T <= 0 || sigma <= 0) {
-    // At the boundary the option behaves like its intrinsic payoff:
-    // delta is a step function, all convexity/vol/time sensitivities vanish.
-    const itm =
-      type === "call" ? (S > K ? 1 : S === K ? 0.5 : 0) : S < K ? -1 : S === K ? -0.5 : 0;
+    // At the boundary the option behaves like its intrinsic payoff: delta is
+    // a (damped) step function and all convexity/vol/time sensitivities
+    // vanish. For sigma = 0 with T > 0 moneyness is decided by the forward
+    // F = S e^{(r-q)T}, and dV/dS carries the e^{-qT} factor
+    // (V = e^{-rT} max(F - K, 0)  =>  dV/dS = e^{-qT} 1{F > K} for a call).
+    const dfq = T > 0 ? Math.exp(-q * T) : 1;
+    const fwd = T > 0 ? S * Math.exp((r - q) * T) : S;
+    const step =
+      type === "call" ? (fwd > K ? 1 : fwd === K ? 0.5 : 0) : fwd < K ? -1 : fwd === K ? -0.5 : 0;
     return {
       price: price(type, inputs),
-      delta: itm,
+      delta: dfq * step,
       gamma: 0,
       theta: 0,
       vega: 0,

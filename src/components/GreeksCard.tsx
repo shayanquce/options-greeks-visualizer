@@ -60,7 +60,7 @@ export function GreeksCard({ greeks }: { greeks: Greeks }) {
 
       <div className="flex items-stretch border-l border-edge">
         <div className="flex items-stretch divide-x divide-edge">
-          <Cell label="Vanna" value={greeks.vanna} signed />
+          <Cell label="Vanna" value={greeks.vanna / 100} unit="/1%" signed />
           <Cell label="Charm" value={greeks.charm / 365} unit="/d" signed />
           <Cell label="Vomma" value={greeks.vomma / 100} unit="/1%" signed />
         </div>

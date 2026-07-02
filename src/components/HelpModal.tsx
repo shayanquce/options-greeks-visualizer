@@ -31,7 +31,7 @@ const SECTIONS: HelpSection[] = [
   },
   {
     title: "Greeks bar",
-    body: "Theo value is the model price of one contract. Delta tells you how much the option price moves per $1 stock move (also your share-equivalent exposure). Gamma is how fast delta changes. Theta is daily time decay. Vega is sensitivity to a 1-point vol move. Rho is sensitivity to rates. Vanna, charm, and vomma are second-order effects that matter more to market makers and advanced hedging.",
+    body: "Option price is the model value per share; like exchange quotes, multiply by 100 for one listed contract. Delta tells you how much the option price moves per $1 stock move (also your share-equivalent exposure). Gamma is how fast delta changes. Theta is daily time decay. Vega is sensitivity to a 1-point vol move. Rho is sensitivity to rates. Vanna, charm, and vomma are higher-order effects that matter more to market makers and advanced hedging.",
   },
   {
     title: "Greek Curves",
@@ -70,15 +70,15 @@ export function HelpModal({ open, onClose }: Props) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-12" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-txt/25 p-4 pt-12" onClick={onClose}>
       <div
-        className="relative w-full max-w-lg border border-edge bg-panel"
+        className="relative w-full max-w-lg rounded-[3px] border border-edge2 bg-panel shadow-lg"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-labelledby="help-title"
       >
         <div className="flex items-center justify-between border-b border-edge px-4 py-3">
-          <h2 id="help-title" className="text-[13px] font-semibold text-txt">
+          <h2 id="help-title" className="font-serif text-[16px] font-semibold tracking-tight text-txt">
             How to use this app
           </h2>
           <button

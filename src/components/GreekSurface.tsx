@@ -12,7 +12,7 @@ const GREEK_OPTS: { key: GreekKey; label: string; scale: (x: number) => number; 
   { key: "theta", label: "Theta Θ", scale: (x) => x / 365, unit: "/day" },
   { key: "vega", label: "Vega ν", scale: (x) => x / 100, unit: "/1%" },
   { key: "rho", label: "Rho ρ", scale: (x) => x / 100, unit: "/1%" },
-  { key: "vanna", label: "Vanna", scale: (x) => x, unit: "" },
+  { key: "vanna", label: "Vanna", scale: (x) => x / 100, unit: "/1%" },
   { key: "charm", label: "Charm", scale: (x) => x / 365, unit: "/day" },
   { key: "vomma", label: "Vomma", scale: (x) => x / 100, unit: "/1%" },
   { key: "price", label: "Value V", scale: (x) => x, unit: "" },
@@ -157,7 +157,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
                 textAnchor="end"
                 fontSize={9}
                 fontFamily="IBM Plex Mono, monospace"
-                fill="#6a6a6a"
+                fill="#7d7460"
               >
                 {fmtTick(spots[r])}
               </text>
@@ -174,7 +174,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
                 textAnchor="middle"
                 fontSize={9}
                 fontFamily="IBM Plex Mono, monospace"
-                fill="#6a6a6a"
+                fill="#7d7460"
               >
                 {Math.round(dayArr[c])}d
               </text>
@@ -185,7 +185,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
             y={H - 2}
             textAnchor="middle"
             fontSize={9}
-            fill="#5c5c5c"
+            fill="#978e79"
           >
             time to expiry (calendar days)
           </text>
@@ -195,8 +195,8 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
             const ky = MT + ((sHi - inputs.K) / (sHi - sLo)) * (ROWS * CELL_H);
             return (
               <g>
-                <line x1={ML} x2={ML + COLS * CELL_W} y1={ky} y2={ky} stroke="#d4d4d4" strokeOpacity={0.2} strokeDasharray="2 4" />
-                <text x={ML + COLS * CELL_W - 4} y={ky - 3} textAnchor="end" fontSize={9} fill="#8a8a8a" fontFamily="IBM Plex Mono, monospace">
+                <line x1={ML} x2={ML + COLS * CELL_W} y1={ky} y2={ky} stroke="#211d12" strokeOpacity={0.35} strokeDasharray="2 4" />
+                <text x={ML + COLS * CELL_W - 4} y={ky - 3} textAnchor="end" fontSize={9} fill="#5f584a" fontFamily="IBM Plex Mono, monospace">
                   K {fmt(inputs.K, 0)}
                 </text>
               </g>
@@ -206,9 +206,9 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
           {/* live (S, T) crosshair */}
           {inRange && (
             <g pointerEvents="none">
-              <line x1={cx} x2={cx} y1={MT} y2={MT + ROWS * CELL_H} stroke="#d4d4d4" strokeOpacity={0.3} strokeWidth={0.75} />
-              <line x1={ML} x2={ML + COLS * CELL_W} y1={cy} y2={cy} stroke="#d4d4d4" strokeOpacity={0.3} strokeWidth={0.75} />
-              <circle cx={cx} cy={cy} r={3} fill="none" stroke="#e07b20" strokeWidth={1} />
+              <line x1={cx} x2={cx} y1={MT} y2={MT + ROWS * CELL_H} stroke="#211d12" strokeOpacity={0.35} strokeWidth={0.75} />
+              <line x1={ML} x2={ML + COLS * CELL_W} y1={cy} y2={cy} stroke="#211d12" strokeOpacity={0.35} strokeWidth={0.75} />
+              <circle cx={cx} cy={cy} r={3.5} fill="none" stroke="#a4502a" strokeWidth={1.5} />
             </g>
           )}
 
@@ -220,7 +220,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
               width={CELL_W}
               height={CELL_H}
               fill="none"
-              stroke="#d4d4d4"
+              stroke="#211d12"
               strokeWidth={1}
               pointerEvents="none"
             />

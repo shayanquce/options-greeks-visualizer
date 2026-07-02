@@ -149,6 +149,21 @@ describe("analytic Greeks", () => {
     expect(greeks("call", { ...atm, S: 20 }).delta).toBeCloseTo(0, 4);
     expect(greeks("put", { ...atm, S: 20 }).delta).toBeCloseTo(-Math.exp(-atm.q), 4);
   });
+
+  it("sigma -> 0 boundary: delta is the e^{-qT}-damped step on the FORWARD", () => {
+    // S = 100, K = 101, r = 5%, q = 0, T = 1: forward = 105.13 > K, so the
+    // deterministic call is ITM even though spot < strike.
+    const inputs: BsmInputs = { S: 100, K: 101, T: 1, r: 0.05, sigma: 0, q: 0.02 };
+    const fwd = inputs.S * Math.exp((inputs.r - inputs.q) * inputs.T);
+    expect(fwd).toBeGreaterThan(inputs.K);
+    expect(greeks("call", inputs).delta).toBeCloseTo(Math.exp(-inputs.q * inputs.T), 10);
+    expect(greeks("put", inputs).delta).toBeCloseTo(0, 10);
+    // And the tiny-sigma analytic delta converges to the same limit
+    expect(greeks("call", { ...inputs, sigma: 1e-4 }).delta).toBeCloseTo(
+      Math.exp(-inputs.q * inputs.T),
+      4,
+    );
+  });
 });
 
 describe("implied volatility solver", () => {

@@ -1,31 +1,41 @@
 @import "tailwindcss";
 
+/*
+ * Print-inspired light theme: warm paper ground, ink text, hairline rules.
+ * Type system: Source Serif 4 for headings and editorial notes,
+ * Libre Franklin for UI text, IBM Plex Mono for every number.
+ */
 @theme {
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Libre Franklin", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
 
-  --color-term: #0c0c0c;
-  --color-panel: #141414;
-  --color-panel2: #1a1a1a;
-  --color-panel3: #222222;
-  --color-edge: #2a2a2a;
-  --color-edge2: #383838;
+  --color-term: #f2efe6; /* page ground */
+  --color-panel: #faf8f2; /* cards */
+  --color-panel2: #eeeade; /* raised / hover */
+  --color-panel3: #e5dfce;
+  --color-edge: #ddd6c3; /* hairline rules */
+  --color-edge2: #bcb29a;
 
-  --color-txt: #d4d4d4;
-  --color-dim: #8a8a8a;
-  --color-faint: #5c5c5c;
+  --color-txt: #211d12; /* ink */
+  --color-dim: #5f584a;
+  --color-faint: #978e79;
 
-  --color-accent: #e07b20;
-  --color-accent2: #f09540;
-  --color-up: #3d9970;
-  --color-down: #c94a4a;
-  --color-info: #6b8cae;
+  --color-accent: #a4502a; /* sienna, the "one ink" accent of the print palette */
+  --color-accent2: #c26a3d;
+  --color-up: #2f7d5a;
+  --color-down: #a83a32;
+  --color-info: #3d6484;
 }
 
 html,
 body,
 #root {
   height: 100%;
+}
+
+html {
+  background: var(--color-term);
 }
 
 body {
@@ -39,9 +49,10 @@ body {
 }
 
 ::selection {
-  background: rgba(224, 123, 32, 0.25);
+  background: rgba(164, 80, 42, 0.2);
 }
 
+/* tabular numerals everywhere a value is displayed */
 .tnum {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
@@ -49,16 +60,19 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* small caps-style section label, like a figure caption */
 .lbl {
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-dim);
 }
 
 .card {
   background: var(--color-panel);
   border: 1px solid var(--color-edge);
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 /* range sliders */
@@ -72,7 +86,7 @@ input[type="range"] {
 }
 input[type="range"]::-webkit-slider-runnable-track {
   height: 2px;
-  border-radius: 0;
+  border-radius: 1px;
   background: linear-gradient(
     to right,
     var(--color-accent) 0,
@@ -85,11 +99,11 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   margin-top: -5px;
-  width: 10px;
-  height: 10px;
-  border-radius: 1px;
-  background: var(--color-panel2);
-  border: 1px solid var(--color-accent);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-panel);
+  border: 1.5px solid var(--color-accent);
 }
 input[type="range"]:hover::-webkit-slider-thumb {
   background: var(--color-accent);
@@ -99,20 +113,20 @@ input[type="range"]:active::-webkit-slider-thumb {
 }
 input[type="range"]::-moz-range-track {
   height: 2px;
-  border-radius: 0;
+  border-radius: 1px;
   background: var(--color-edge2);
 }
 input[type="range"]::-moz-range-progress {
   height: 2px;
-  border-radius: 0;
+  border-radius: 1px;
   background: var(--color-accent);
 }
 input[type="range"]::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  border-radius: 1px;
-  background: var(--color-panel2);
-  border: 1px solid var(--color-accent);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-panel);
+  border: 1.5px solid var(--color-accent);
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -138,8 +152,8 @@ select {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-edge2);
-  border-radius: 0;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #4a4a4a;
+  background: #a89c81;
 }
