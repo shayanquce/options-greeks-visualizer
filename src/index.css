@@ -18,7 +18,7 @@
   --color-faint: #515a69; /* tertiary / captions */
 
   /* --- signature + directional --- */
-  --color-accent: #f0b429; /* gold — the live/active signal */
+  --color-accent: #f0b429; /* gold: the live/active signal */
   --color-accent2: #ffcf5c; /* lighter gold for highlights */
   --color-up: #2ebd85; /* gains / long / calls */
   --color-down: #f6465d; /* losses / short / puts */
@@ -29,6 +29,14 @@ html,
 body,
 #root {
   height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
@@ -49,7 +57,7 @@ body {
   background: rgba(240, 180, 41, 0.28);
 }
 
-/* Tabular monospace numerals — every price/greek uses this */
+/* Tabular monospace numerals: every price/greek uses this */
 .tnum {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;

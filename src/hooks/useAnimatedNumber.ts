@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * Smoothly interpolates a displayed number toward its target so ticking
- * values glide instead of snapping — the "live quote" feel. Ease-out
+ * values glide instead of snapping, for a "live quote" feel. Ease-out
  * quadratic over ~140ms; cancels cleanly when the target changes mid-flight.
  */
 export function useAnimatedNumber(target: number, duration = 140): number {

@@ -1,8 +1,8 @@
-/** Number formatting helpers — trading-terminal conventions. */
+/** Number formatting helpers for trading-terminal conventions. */
 
-/** Fixed-decimal with thousands separators; em-dash for non-finite. */
+/** Fixed-decimal with thousands separators; "--" for non-finite. */
 export function fmt(x: number, dp = 4): string {
-  if (!Number.isFinite(x)) return "—";
+  if (!Number.isFinite(x)) return "--";
   return x.toLocaleString("en-US", {
     minimumFractionDigits: dp,
     maximumFractionDigits: dp,
@@ -11,13 +11,13 @@ export function fmt(x: number, dp = 4): string {
 
 /** Signed variant: always shows +/-. */
 export function fmtSigned(x: number, dp = 4): string {
-  if (!Number.isFinite(x)) return "—";
+  if (!Number.isFinite(x)) return "--";
   return (x >= 0 ? "+" : "") + fmt(x, dp);
 }
 
-/** Decimal rate -> percent string, e.g. 0.0525 -> "5.25%". */
+/** Decimal rate to percent string, e.g. 0.0525 -> "5.25%". */
 export function fmtPct(x: number, dp = 2): string {
-  if (!Number.isFinite(x)) return "—";
+  if (!Number.isFinite(x)) return "--";
   return fmt(x * 100, dp) + "%";
 }
 

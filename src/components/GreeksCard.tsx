@@ -26,7 +26,7 @@ function Cell({ label, symbol, value, unit, dp = 4, signed }: CellProps) {
         {symbol && <span className="font-mono text-[11px] text-faint">{symbol}</span>}
         <span className="lbl text-[9px]">{label}</span>
       </div>
-      <div className={`tnum mt-1 whitespace-nowrap text-[14px] font-medium leading-none ${color}`}>
+      <div className={`tnum mt-1 whitespace-nowrap text-[14px] font-medium leading-none transition-colors duration-300 ${color}`}>
         {fmt(v, dp)}
         {unit && <span className="ml-1 text-[9px] font-normal text-faint">{unit}</span>}
       </div>

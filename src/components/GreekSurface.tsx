@@ -29,7 +29,7 @@ const MT = 8;
 const MR = 8;
 
 /**
- * Heatmap of a chosen Greek over (time to expiry) x (spot) — the classic
+ * Heatmap of a chosen Greek over (time to expiry) x (spot), the classic
  * "gamma ridge" picture: watch gamma concentrate around the strike as
  * expiry approaches. Rendered as raw SVG rects for full control; a
  * crosshair marks the live (S, T) from the inputs panel.
@@ -148,6 +148,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
                 width={CELL_W + 0.5}
                 height={CELL_H + 0.5}
                 fill={color(v)}
+                style={{ transition: "fill 220ms ease-out" }}
               />
             )),
           )}

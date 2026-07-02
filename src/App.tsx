@@ -9,6 +9,7 @@ import { GreekSurface } from "./components/GreekSurface";
 import { TimeDecay } from "./components/TimeDecay";
 import { StrategyBuilder } from "./components/StrategyBuilder";
 import { IconClock, IconCurves, IconGrid, IconLayers, IconPayoff } from "./components/icons";
+import { GreeksGlossary } from "./components/GreeksGlossary";
 import type { JSX } from "react";
 
 const TABS: { id: Tab; icon: (p: { className?: string }) => JSX.Element }[] = [
@@ -36,7 +37,9 @@ function MoneynessBadge({ m }: { m: number }) {
         ? ["OTM", "text-down bg-down/10 border-down/25"]
         : ["ATM", "text-accent bg-accent/10 border-accent/25"];
   return (
-    <span className={`rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${cls}`}>
+    <span
+      className={`rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider transition-colors duration-300 ${cls}`}
+    >
       {label}
     </span>
   );
@@ -81,7 +84,7 @@ export default function App() {
             Greeks<span className="text-accent">Terminal</span>
           </h1>
           <div className="text-[9.5px] uppercase tracking-[0.13em] text-faint">
-            Black–Scholes–Merton · European
+            Black-Scholes-Merton · European
           </div>
         </div>
 
@@ -155,8 +158,10 @@ export default function App() {
 
       <footer className="flex items-center gap-2 border-t border-edge px-4 py-1.5 text-[10px] text-faint">
         <span>Constant σ, r, q · no transaction costs · θ per calendar day, ν &amp; ρ per 1%.</span>
-        <span className="ml-auto">Educational tool — not investment advice.</span>
+        <span className="ml-auto">Educational tool, not investment advice.</span>
       </footer>
+
+      <GreeksGlossary />
     </div>
   );
 }

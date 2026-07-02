@@ -1,4 +1,4 @@
-/** Minimal inline icon set — 1.6px stroke, currentColor, 16px grid. */
+/** Minimal inline icon set: 1.6px stroke, currentColor, 16px grid. */
 import type { SVGProps } from "react";
 
 type P = SVGProps<SVGSVGElement>;

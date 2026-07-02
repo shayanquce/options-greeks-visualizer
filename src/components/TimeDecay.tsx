@@ -19,7 +19,7 @@ import { IconPause, IconPlay, IconReset } from "./icons";
 /**
  * Theta decay, animated. Left: the value curve V(S) collapsing onto the
  * intrinsic hockey stick as days remaining -> 0. Right: the decay path
- * V(t) at the current spot — the classic accelerating ATM time-value burn.
+ * V(t) at the current spot, the classic accelerating ATM time-value burn.
  */
 export function TimeDecay({ inputs }: { inputs: AppInputs }) {
   const [day, setDay] = useState(inputs.days);
@@ -147,7 +147,7 @@ export function TimeDecay({ inputs }: { inputs: AppInputs }) {
         {/* V(S) collapsing to intrinsic */}
         <div className="h-[340px]">
           <div className="px-2 pb-1 text-[10px] text-faint">
-            value vs spot — amber curve collapses onto intrinsic as t → expiry
+            value vs spot: amber curve collapses onto intrinsic as t approaches expiry
           </div>
           <ResponsiveContainer width="100%" height="92%">
             <LineChart data={curveData} margin={{ top: 4, right: 12, bottom: 0, left: -4 }}>
@@ -205,7 +205,7 @@ export function TimeDecay({ inputs }: { inputs: AppInputs }) {
         {/* V(t) decay path at current spot */}
         <div className="h-[340px]">
           <div className="px-2 pb-1 text-[10px] text-faint">
-            value vs days remaining at S = {fmt(inputs.S, 2)} — theta bleed accelerates near expiry
+            value vs days remaining at S = {fmt(inputs.S, 2)}: theta bleed accelerates near expiry
           </div>
           <ResponsiveContainer width="100%" height="92%">
             <LineChart data={decayData} margin={{ top: 4, right: 12, bottom: 0, left: -4 }}>

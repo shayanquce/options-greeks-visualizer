@@ -161,13 +161,13 @@ export function InputsPanel({ inputs, onChange }: Props) {
           {mktPrice === "" ? (
             <span className="text-[11px] text-faint">Enter a market price to back out σ</span>
           ) : iv === null ? (
-            <span className="text-[11px] font-medium text-down">No solution — price outside no-arb bounds</span>
+            <span className="text-[11px] font-medium text-down">No solution: price outside no-arb bounds</span>
           ) : (
             <span className="tnum text-[12px] text-accent">σ implied = {fmtPct(iv, 2)}</span>
           )}
         </div>
         <p className="mt-2 border-t border-edge pt-2 text-[10px] leading-[1.5] text-faint">
-          Newton–Raphson on BSM vega with a bisection safeguard.
+          Newton-Raphson on BSM vega with a bisection safeguard.
         </p>
       </div>
     </div>

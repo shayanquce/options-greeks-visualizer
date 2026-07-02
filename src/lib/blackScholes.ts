@@ -21,7 +21,7 @@
  *
  * All Greeks below are the analytic (closed-form) expressions, not finite
  * differences. Unit conventions are documented per Greek; the raw values are
- * "per unit" (per 1.00 of vol / rate / year) — UI-friendly rescaling
+ * "per unit" (per 1.00 of vol / rate / year); UI-friendly rescaling
  * (per 1% vol, per calendar day) is left to the presentation layer.
  */
 
@@ -49,11 +49,11 @@ export interface Greeks {
   vega: number;
   /** dV/dr per 1.00 of rate (divide by 100 for per 1% rate move) */
   rho: number;
-  /** d²V/dS dsigma — sensitivity of delta to vol (per 1.00 vol) */
+  /** d²V/dS dsigma, sensitivity of delta to vol (per 1.00 vol) */
   vanna: number;
-  /** -d²V/dS dT — delta decay per YEAR */
+  /** -d²V/dS dT, delta decay per YEAR */
   charm: number;
-  /** d²V/dsigma² — vega convexity (per 1.00 vol) */
+  /** d²V/dsigma², vega convexity (per 1.00 vol) */
   vomma: number;
 }
 
@@ -66,7 +66,7 @@ export function normPdf(x: number): number {
  * Standard normal CDF, N(x), using Hart's 1968 rational approximation as
  * presented in West, "Better approximations to cumulative normal functions"
  * (Wilmott, 2005). Accurate to ~1e-14 (near double precision) across the
- * whole real line — the same algorithm used in production pricing libraries.
+ * whole real line, the same algorithm used in production pricing libraries.
  * That precision matters here because the unit tests validate the analytic
  * Greeks against finite differences of this function.
  */
@@ -112,7 +112,7 @@ export function d1d2({ S, K, T, r, sigma, q }: BsmInputs): {
   return { d1, d2: d1 - sigma * sqrtT };
 }
 
-/** Intrinsic value — the option's value at expiry (or in the sigma -> 0, T -> 0 limit). */
+/** Intrinsic value: the option's value at expiry (or in the sigma -> 0, T -> 0 limit). */
 export function intrinsic(type: OptionType, S: number, K: number): number {
   return type === "call" ? Math.max(S - K, 0) : Math.max(K - S, 0);
 }
@@ -233,7 +233,7 @@ export function greeks(type: OptionType, inputs: BsmInputs): Greeks {
  * Vega of a European option is strictly positive for T > 0, so BSM price is
  * monotone increasing in sigma and the root is unique when it exists. When a
  * Newton step leaves the current bracket (or vega is tiny deep ITM/OTM), we
- * fall back to bisection on the maintained [lo, hi] bracket — this keeps the
+ * fall back to bisection on the maintained [lo, hi] bracket. This keeps the
  * quadratic convergence of Newton near the root with the global robustness
  * of bisection.
  *
