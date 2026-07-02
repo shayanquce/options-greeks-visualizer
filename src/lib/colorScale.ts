@@ -1,39 +1,35 @@
 /**
  * Color scales for the Greek surface heatmap.
- *
- * - Sequential ramp (dark navy -> amber -> pale gold) for one-signed values
- *   (gamma, vega, price ...), loosely modeled on the plasma/inferno family.
- * - Diverging ramp (cyan <- dark -> amber) for signed values (theta, vanna,
- *   charm ...) so zero reads as "dark" and sign is instantly legible.
+ * Terminal-style ramps: no purple/magenta plasma colormap.
  */
 
 type Rgb = [number, number, number];
 
 const SEQ: Rgb[] = [
-  [10, 13, 22], // #0a0d16
-  [23, 34, 66], // #172242
-  [44, 62, 118], // #2c3e76
-  [95, 74, 152], // #5f4a98
-  [163, 80, 137], // #a35089
-  [219, 106, 84], // #db6a54
-  [245, 166, 35], // #f5a623
-  [255, 226, 138], // #ffe28a
+  [12, 12, 12],
+  [22, 28, 38],
+  [38, 52, 72],
+  [72, 88, 108],
+  [120, 100, 72],
+  [180, 120, 48],
+  [224, 140, 32],
+  [240, 180, 100],
 ];
 
 const DIV_NEG: Rgb[] = [
-  [10, 13, 22], // dark center
-  [17, 51, 85], // deep blue
-  [22, 105, 153], // ocean
-  [56, 189, 248], // #38bdf8 cyan
-  [186, 240, 255], // pale cyan
+  [12, 12, 12],
+  [20, 32, 48],
+  [40, 68, 96],
+  [80, 120, 148],
+  [140, 170, 190],
 ];
 
 const DIV_POS: Rgb[] = [
-  [10, 13, 22],
-  [77, 48, 24],
-  [166, 99, 28],
-  [245, 166, 35], // amber
-  [255, 231, 158], // pale gold
+  [12, 12, 12],
+  [48, 32, 20],
+  [100, 64, 32],
+  [180, 110, 40],
+  [230, 170, 90],
 ];
 
 function lerpRamp(ramp: Rgb[], t: number): string {
@@ -51,12 +47,10 @@ export function seqColor(t: number): string {
   return lerpRamp(SEQ, t);
 }
 
-/** t in [-1, 1]: negative -> cyan side, positive -> amber side. */
 export function divColor(t: number): string {
   return t < 0 ? lerpRamp(DIV_NEG, -t) : lerpRamp(DIV_POS, t);
 }
 
-/** CSS gradient stops for the legend bar. */
 export function legendGradient(diverging: boolean): string {
   const stops: string[] = [];
   const n = 24;

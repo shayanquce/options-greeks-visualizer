@@ -76,53 +76,41 @@ const ENTRIES: Entry[] = [
   },
 ];
 
-/**
- * Reference glossary for every Greek shown in the app, grouped by order.
- * Formulas mirror the closed-form derivatives implemented in
- * src/lib/blackScholes.ts.
- */
 export function GreeksGlossary() {
   const firstOrder = ENTRIES.filter((e) => e.order === "First");
   const secondOrder = ENTRIES.filter((e) => e.order === "Second");
 
   return (
-    <section className="border-t border-edge bg-panel/30 px-4 py-8">
+    <section className="border-t border-edge bg-panel px-4 py-6">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-5 flex items-baseline gap-2">
-          <h2 className="text-[13px] font-semibold tracking-tight text-txt">Greeks Reference</h2>
-          <span className="text-[10px] text-faint">closed-form derivatives of the BSM value function</span>
+        <div className="mb-4">
+          <h2 className="text-[12px] font-semibold text-txt">Greeks reference</h2>
+          <p className="mt-0.5 text-[10px] text-faint">Closed-form derivatives of the BSM value function</p>
         </div>
 
-        <GreekGroup title="First-Order" subtitle="sensitivity of value to a single market input" entries={firstOrder} />
-        <div className="mt-5">
-          <GreekGroup title="Second-Order" subtitle="sensitivity of a first-order Greek to another input" entries={secondOrder} />
+        <GreekGroup title="First-order" entries={firstOrder} />
+        <div className="mt-4">
+          <GreekGroup title="Second-order" entries={secondOrder} />
         </div>
       </div>
     </section>
   );
 }
 
-function GreekGroup({ title, subtitle, entries }: { title: string; subtitle: string; entries: Entry[] }) {
+function GreekGroup({ title, entries }: { title: string; entries: Entry[] }) {
   return (
     <div>
-      <div className="mb-2.5 flex items-baseline gap-2">
-        <span className="lbl text-[9px]">{title}</span>
-        <span className="text-[10px] text-faint">{subtitle}</span>
-      </div>
-      <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="lbl mb-2">{title}</div>
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
         {entries.map((e) => (
-          <div key={e.name} className="card px-3.5 py-3">
+          <div key={e.name} className="border border-edge bg-panel2 px-3 py-2.5">
             <div className="flex items-center gap-2">
-              <span
-                className="flex h-6 w-6 shrink-0 items-center justify-center rounded font-mono text-[12px]"
-                style={{ color: e.color, background: `${e.color}18` }}
-              >
-                {e.symbol || e.name.charAt(0)}
-              </span>
-              <span className="text-[12px] font-medium text-txt">{e.name}</span>
+              <span className="h-3 w-0.5 shrink-0" style={{ background: e.color }} />
+              <span className="font-mono text-[11px] text-faint">{e.symbol || e.name.charAt(0)}</span>
+              <span className="text-[11px] font-medium text-txt">{e.name}</span>
               <span className="tnum ml-auto text-[10px] text-faint">{e.formula}</span>
             </div>
-            <p className="mt-2 text-[11px] leading-[1.55] text-dim">{e.def}</p>
+            <p className="mt-1.5 text-[10px] leading-[1.5] text-dim">{e.def}</p>
           </div>
         ))}
       </div>

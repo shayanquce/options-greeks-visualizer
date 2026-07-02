@@ -21,28 +21,14 @@ const TABS: { id: Tab; icon: (p: { className?: string }) => JSX.Element }[] = [
 ];
 type Tab = "Greek Curves" | "Payoff" | "Surface" | "Time Decay" | "Strategy";
 
-function Logo() {
-  return (
-    <div className="flex h-7 w-7 items-center justify-center rounded-[7px] bg-gradient-to-br from-accent to-[#c8901a] shadow-[0_1px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.25)]">
-      <span className="font-mono text-[15px] font-bold leading-none text-[#0a0b0f]">Δ</span>
-    </div>
-  );
-}
-
 function MoneynessBadge({ m }: { m: number }) {
   const [label, cls] =
     m > 1.02
-      ? ["ITM", "text-up bg-up/10 border-up/25"]
+      ? ["ITM", "text-up"]
       : m < 0.98
-        ? ["OTM", "text-down bg-down/10 border-down/25"]
-        : ["ATM", "text-accent bg-accent/10 border-accent/25"];
-  return (
-    <span
-      className={`rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider transition-colors duration-300 ${cls}`}
-    >
-      {label}
-    </span>
-  );
+        ? ["OTM", "text-down"]
+        : ["ATM", "text-accent"];
+  return <span className={`text-[10px] font-medium ${cls}`}>{label}</span>;
 }
 
 export default function App() {
@@ -76,20 +62,16 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* masthead */}
-      <header className="flex items-center gap-3 border-b border-edge bg-panel/70 px-4 py-2.5 backdrop-blur-sm">
-        <Logo />
+      <header className="flex items-center gap-3 border-b border-edge bg-panel px-4 py-2">
+        <div className="flex h-7 w-7 items-center justify-center border border-accent bg-panel2">
+          <span className="font-mono text-[14px] font-semibold leading-none text-accent">Δ</span>
+        </div>
         <div className="leading-tight">
-          <h1 className="text-[13px] font-semibold tracking-tight text-txt">
-            Greeks<span className="text-accent">Terminal</span>
-          </h1>
-          <div className="text-[9.5px] uppercase tracking-[0.13em] text-faint">
-            Black-Scholes-Merton · European
-          </div>
+          <h1 className="text-[13px] font-semibold text-txt">Options Greeks</h1>
+          <div className="text-[10px] text-faint">Black-Scholes-Merton · European</div>
         </div>
 
-        {/* live contract ticker */}
-        <div className="tnum ml-6 hidden items-center gap-4 rounded-md border border-edge bg-panel2/60 px-3 py-1.5 text-[11px] lg:flex">
+        <div className="tnum ml-6 hidden items-center gap-3 border border-edge bg-panel2 px-3 py-1 text-[11px] lg:flex">
           <span className="text-dim">
             {inputs.type === "call" ? (
               <span className="text-up">CALL</span>
@@ -98,55 +80,48 @@ export default function App() {
             )}{" "}
             <span className="text-txt">{fmt(inputs.K, 0)}</span>
           </span>
-          <span className="h-3 w-px bg-edge2" />
+          <span className="h-3 w-px bg-edge" />
           <span className="text-dim">
-            {inputs.days}<span className="text-faint">DTE</span>
+            {inputs.days}<span className="text-faint">d</span>
           </span>
-          <span className="h-3 w-px bg-edge2" />
+          <span className="h-3 w-px bg-edge" />
           <span className="flex items-center gap-1.5 text-dim">
             S/K <span className="text-txt">{fmt(moneyness, 3)}</span>
             <MoneynessBadge m={moneyness} />
           </span>
-          <span className="h-3 w-px bg-edge2" />
+          <span className="h-3 w-px bg-edge" />
           <span className="text-dim">
-            σ <span className="text-accent">{fmtPct(inputs.sigma, 1)}</span>
+            σ <span className="text-txt">{fmtPct(inputs.sigma, 1)}</span>
           </span>
-        </div>
-
-        <div className="ml-auto flex items-center gap-2 text-[10px] font-medium uppercase tracking-wider text-dim">
-          <span className="livedot h-1.5 w-1.5 rounded-full bg-up" />
-          Live
         </div>
       </header>
 
-      {/* greeks summary strip */}
       <GreeksCard greeks={g} />
 
       <div className="flex min-h-0 flex-1">
-        {/* inputs */}
-        <aside className="w-[288px] shrink-0 border-r border-edge bg-panel/40">
+        <aside className="w-[272px] shrink-0 border-r border-edge bg-panel">
           <InputsPanel inputs={inputs} onChange={patch} />
         </aside>
 
-        {/* main area */}
         <main className="flex min-w-0 flex-1 flex-col">
-          <nav className="flex items-center gap-1 border-b border-edge px-3">
+          <nav className="flex items-center border-b border-edge">
             {TABS.map(({ id, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => setTab(id)}
-                className={`group relative flex items-center gap-2 px-3 py-2.5 text-[11px] font-semibold tracking-tight transition-colors ${
-                  tab === id ? "text-accent" : "text-dim hover:text-txt"
+                className={`flex items-center gap-1.5 border-r border-edge px-3 py-2 text-[11px] font-medium ${
+                  tab === id
+                    ? "bg-panel2 text-txt"
+                    : "bg-panel text-dim hover:bg-panel2 hover:text-txt"
                 }`}
               >
-                <Icon className={tab === id ? "text-accent" : "text-faint group-hover:text-dim"} />
+                <Icon className={tab === id ? "text-accent" : "text-faint"} />
                 {id}
-                {tab === id && <span className="absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-accent" />}
               </button>
             ))}
           </nav>
 
-          <div key={tab} className="fadein min-h-0 flex-1 overflow-y-auto p-3">
+          <div className="min-h-0 flex-1 overflow-y-auto p-3">
             {tab === "Greek Curves" && <GreekCurves inputs={inputs} />}
             {tab === "Payoff" && <PayoffChart inputs={inputs} />}
             {tab === "Surface" && <GreekSurface inputs={inputs} />}

@@ -3,7 +3,6 @@ import { greeks, type Greeks } from "../lib/blackScholes";
 import { divColor, legendGradient, seqColor } from "../lib/colorScale";
 import { fmt, fmtTick } from "../lib/format";
 import type { AppInputs } from "./InputsPanel";
-import { GK } from "./chartTheme";
 
 type GreekKey = keyof Greeks;
 
@@ -110,20 +109,14 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
       <div className="flex flex-wrap items-center gap-1.5 border-b border-edge px-3 py-2.5">
         <span className="lbl mr-1.5">Surface · Spot × Time</span>
         {GREEK_OPTS.map((o) => {
-          const c = GK[o.key];
           const on = sel === o.key;
           return (
             <button
               key={o.key}
               onClick={() => setSel(o.key)}
-              className="rounded px-2 py-1 font-mono text-[10px] transition-all"
-              style={
-                on
-                  ? { color: c, background: `${c}1e`, boxShadow: `inset 0 0 0 1px ${c}80` }
-                  : { color: "#838d9e" }
-              }
-              onMouseEnter={(e) => !on && (e.currentTarget.style.background = "#14171e")}
-              onMouseLeave={(e) => !on && (e.currentTarget.style.background = "transparent")}
+              className={`px-2 py-0.5 font-mono text-[10px] ${
+                on ? "bg-panel2 text-txt" : "text-dim hover:bg-panel2 hover:text-txt"
+              }`}
             >
               {o.label}
             </button>
@@ -164,7 +157,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
                 textAnchor="end"
                 fontSize={9}
                 fontFamily="IBM Plex Mono, monospace"
-                fill="#6d7b93"
+                fill="#6a6a6a"
               >
                 {fmtTick(spots[r])}
               </text>
@@ -181,7 +174,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
                 textAnchor="middle"
                 fontSize={9}
                 fontFamily="IBM Plex Mono, monospace"
-                fill="#6d7b93"
+                fill="#6a6a6a"
               >
                 {Math.round(dayArr[c])}d
               </text>
@@ -192,7 +185,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
             y={H - 2}
             textAnchor="middle"
             fontSize={9}
-            fill="#46536b"
+            fill="#5c5c5c"
           >
             time to expiry (calendar days)
           </text>
@@ -202,8 +195,8 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
             const ky = MT + ((sHi - inputs.K) / (sHi - sLo)) * (ROWS * CELL_H);
             return (
               <g>
-                <line x1={ML} x2={ML + COLS * CELL_W} y1={ky} y2={ky} stroke="#ffffff" strokeOpacity={0.25} strokeDasharray="2 4" />
-                <text x={ML + COLS * CELL_W - 4} y={ky - 3} textAnchor="end" fontSize={9} fill="#8fa0bd" fontFamily="IBM Plex Mono, monospace">
+                <line x1={ML} x2={ML + COLS * CELL_W} y1={ky} y2={ky} stroke="#d4d4d4" strokeOpacity={0.2} strokeDasharray="2 4" />
+                <text x={ML + COLS * CELL_W - 4} y={ky - 3} textAnchor="end" fontSize={9} fill="#8a8a8a" fontFamily="IBM Plex Mono, monospace">
                   K {fmt(inputs.K, 0)}
                 </text>
               </g>
@@ -213,9 +206,9 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
           {/* live (S, T) crosshair */}
           {inRange && (
             <g pointerEvents="none">
-              <line x1={cx} x2={cx} y1={MT} y2={MT + ROWS * CELL_H} stroke="#fff" strokeOpacity={0.35} strokeWidth={0.75} />
-              <line x1={ML} x2={ML + COLS * CELL_W} y1={cy} y2={cy} stroke="#fff" strokeOpacity={0.35} strokeWidth={0.75} />
-              <circle cx={cx} cy={cy} r={3.5} fill="none" stroke="#fff" strokeWidth={1.25} />
+              <line x1={cx} x2={cx} y1={MT} y2={MT + ROWS * CELL_H} stroke="#d4d4d4" strokeOpacity={0.3} strokeWidth={0.75} />
+              <line x1={ML} x2={ML + COLS * CELL_W} y1={cy} y2={cy} stroke="#d4d4d4" strokeOpacity={0.3} strokeWidth={0.75} />
+              <circle cx={cx} cy={cy} r={3} fill="none" stroke="#e07b20" strokeWidth={1} />
             </g>
           )}
 
@@ -227,7 +220,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
               width={CELL_W}
               height={CELL_H}
               fill="none"
-              stroke="#fff"
+              stroke="#d4d4d4"
               strokeWidth={1}
               pointerEvents="none"
             />
@@ -235,7 +228,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
         </svg>
 
         {/* hover readout */}
-        <div className="pointer-events-none absolute right-4 top-3 rounded-sm border border-edge2 bg-panel/95 px-2.5 py-1.5 shadow-lg shadow-black/40">
+        <div className="pointer-events-none absolute right-4 top-3 border border-edge2 bg-panel px-2.5 py-1.5">
           {hover && hv !== null ? (
             <div className="tnum text-[11px] leading-5">
               <div className="text-dim">
@@ -245,7 +238,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
               </div>
               <div>
                 <span className="text-dim">{opt.label}</span>{" "}
-                <span className="text-accent">{fmt(hv, 5)}</span>
+                <span className="text-txt">{fmt(hv, 5)}</span>
                 {opt.unit && <span className="ml-1 text-[9px] text-faint">{opt.unit}</span>}
               </div>
             </div>
@@ -258,7 +251,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
       {/* legend */}
       <div className="flex items-center gap-3 border-t border-edge px-3 py-2">
         <span className="tnum text-[10px] text-dim">{fmt(diverging ? -Math.max(Math.abs(vMin), Math.abs(vMax)) : vMin, 4)}</span>
-        <div className="h-2 flex-1 rounded-sm" style={{ background: legendGradient(diverging) }} />
+        <div className="h-1.5 flex-1" style={{ background: legendGradient(diverging) }} />
         <span className="tnum text-[10px] text-dim">{fmt(diverging ? Math.max(Math.abs(vMin), Math.abs(vMax)) : vMax, 4)}</span>
         <span className="ml-2 text-[10px] text-faint">
           {opt.label}

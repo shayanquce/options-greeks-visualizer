@@ -91,9 +91,9 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
             <button
               key={p.name}
               onClick={() => applyPreset(p.name)}
-              className={`rounded px-2.5 py-1 text-[10px] font-medium transition-all ${
+              className={`px-2.5 py-1 text-[10px] font-medium ${
                 presetName === p.name
-                  ? "bg-accent/15 text-accent shadow-[inset_0_0_0_1px] shadow-accent/50"
+                  ? "bg-panel2 text-txt"
                   : "text-dim hover:bg-panel2 hover:text-txt"
               }`}
             >
@@ -108,7 +108,7 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
         {/* legs table */}
         <table className="w-full">
           <thead>
-            <tr className="text-left text-[9px] uppercase tracking-[0.14em] text-faint">
+            <tr className="text-left text-[10px] text-faint">
               <th className="px-3 py-1.5 font-semibold">Leg</th>
               <th className="px-2 py-1.5 font-semibold">Type</th>
               <th className="px-2 py-1.5 font-semibold">Strike</th>
@@ -128,7 +128,7 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
                     <select
                       value={leg.type}
                       onChange={(e) => patchLeg(i, { type: e.target.value as "call" | "put" })}
-                      className="rounded-sm border border-edge bg-panel2 px-1 py-0.5 font-mono text-[10px] uppercase text-txt outline-none focus:border-accent/60"
+                      className="border border-edge bg-panel2 px-1 py-0.5 font-mono text-[10px] uppercase text-txt outline-none focus:border-edge2"
                     >
                       <option value="call">call</option>
                       <option value="put">put</option>
@@ -145,7 +145,7 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
                         const v = parseFloat(e.target.value);
                         if (Number.isFinite(v) && v > 0) patchLeg(i, { strike: v });
                       }}
-                      className="tnum w-[72px] rounded-sm border border-edge bg-panel2 px-1.5 py-0.5 text-right text-txt outline-none focus:border-accent/60"
+                      className="tnum w-[72px] border border-edge bg-panel2 px-1.5 py-0.5 text-right text-txt outline-none focus:border-edge2"
                     />
                   ) : (
                     <span className="tnum text-faint">entry {fmt(leg.entry, 2)}</span>
@@ -160,7 +160,7 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
                       const v = parseFloat(e.target.value);
                       if (Number.isFinite(v)) patchLeg(i, { qty: v });
                     }}
-                    className={`tnum w-[56px] rounded-sm border border-edge bg-panel2 px-1.5 py-0.5 text-right outline-none focus:border-accent/60 ${
+                    className={`tnum w-[56px] border border-edge bg-panel2 px-1.5 py-0.5 text-right outline-none focus:border-edge2 ${
                       leg.qty >= 0 ? "text-up" : "text-down"
                     }`}
                   />
@@ -196,13 +196,13 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
                 { kind: "option", type: "call", strike: roundStrike(inputs.S), qty: 1 },
               ])
             }
-            className="flex items-center gap-1 rounded border border-edge2 py-1 pl-1.5 pr-2.5 text-[10px] font-medium uppercase tracking-wider text-dim transition-colors hover:border-accent/60 hover:text-accent"
+            className="flex items-center gap-1 border border-edge2 py-1 pl-1.5 pr-2.5 text-[10px] font-medium text-dim hover:border-edge2 hover:text-txt"
           >
             <IconPlus width={11} height={11} /> option
           </button>
           <button
             onClick={() => setLegs((ls) => [...ls, { kind: "stock", qty: 1, entry: inputs.S }])}
-            className="flex items-center gap-1 rounded border border-edge2 py-1 pl-1.5 pr-2.5 text-[10px] font-medium uppercase tracking-wider text-dim transition-colors hover:border-accent/60 hover:text-accent"
+            className="flex items-center gap-1 border border-edge2 py-1 pl-1.5 pr-2.5 text-[10px] font-medium text-dim hover:border-edge2 hover:text-txt"
           >
             <IconPlus width={11} height={11} /> stock
           </button>
@@ -227,7 +227,7 @@ export function StrategyBuilder({ inputs }: { inputs: AppInputs }) {
           ] as const
         ).map(([label, v, dp]) => (
           <div key={label} className="flex-1 px-3 py-2.5">
-            <div className="lbl text-[9px]">{label}</div>
+            <div className="lbl text-[10px]">{label}</div>
             <div
               className={`tnum mt-1 text-[13px] font-medium ${
                 v > 1e-12 ? "text-up" : v < -1e-12 ? "text-down" : "text-txt"

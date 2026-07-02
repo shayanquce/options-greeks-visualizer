@@ -98,7 +98,7 @@ export function TimeDecay({ inputs }: { inputs: AppInputs }) {
               if (day <= 0) setDay(inputs.days);
               setPlaying((p) => !p);
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-md border border-edge2 text-accent transition-colors hover:border-accent/60 hover:bg-accent/10"
+            className="flex h-7 w-7 items-center justify-center border border-edge2 text-txt hover:border-edge2 hover:bg-panel2"
             title={playing ? "pause" : "play"}
           >
             {playing ? <IconPause /> : <IconPlay />}
@@ -108,7 +108,7 @@ export function TimeDecay({ inputs }: { inputs: AppInputs }) {
               setPlaying(false);
               setDay(inputs.days);
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-md border border-edge2 text-dim transition-colors hover:border-edge2 hover:text-txt"
+            className="flex h-7 w-7 items-center justify-center border border-edge2 text-dim hover:border-edge2 hover:text-txt hover:bg-panel2"
             title="reset"
           >
             <IconReset />
@@ -128,16 +128,16 @@ export function TimeDecay({ inputs }: { inputs: AppInputs }) {
           }}
         />
         <span className="tnum text-[11px] text-dim">
-          <span className="text-accent">{fmt(day, 1)}</span> / {inputs.days}d left
+          <span className="text-txt">{fmt(day, 1)}</span> / {inputs.days}d left
         </span>
         <div className="tnum ml-auto flex items-center gap-2 text-[11px]">
-          <span className="rounded border border-edge bg-panel2/50 px-2 py-1 text-faint">
-            value <span className="text-accent">{fmt(nowVal, 4)}</span>
+          <span className="border border-edge bg-panel2 px-2 py-1 text-faint">
+            value <span className="text-txt">{fmt(nowVal, 4)}</span>
           </span>
-          <span className="rounded border border-edge bg-panel2/50 px-2 py-1 text-faint">
+          <span className="border border-edge bg-panel2 px-2 py-1 text-faint">
             time val <span className="text-info">{fmt(Math.max(nowVal - nowIntrinsic, 0), 4)}</span>
           </span>
-          <span className="rounded border border-edge bg-panel2/50 px-2 py-1 text-faint">
+          <span className="border border-edge bg-panel2 px-2 py-1 text-faint">
             Θ/d <span className={nowTheta < 0 ? "text-down" : "text-up"}>{fmt(nowTheta, 4)}</span>
           </span>
         </div>
@@ -197,7 +197,7 @@ export function TimeDecay({ inputs }: { inputs: AppInputs }) {
                 isAnimationActive={false}
               />
               <ReferenceLine x={inputs.S} stroke={CHART.faint} strokeDasharray="4 3" />
-              <ReferenceDot x={inputs.S} y={nowVal} r={3.5} fill={CHART.accent} stroke="#0a0e14" strokeWidth={1.5} />
+              <ReferenceDot x={inputs.S} y={nowVal} r={3} fill={CHART.accent} stroke={CHART.grid} strokeWidth={1} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -237,7 +237,7 @@ export function TimeDecay({ inputs }: { inputs: AppInputs }) {
                 dot={false}
                 isAnimationActive={false}
               />
-              <ReferenceDot x={day} y={nowVal} r={4} fill={CHART.accent} stroke="#0a0e14" strokeWidth={1.5} />
+              <ReferenceDot x={day} y={nowVal} r={3} fill={CHART.accent} stroke={CHART.grid} strokeWidth={1} />
             </LineChart>
           </ResponsiveContainer>
         </div>

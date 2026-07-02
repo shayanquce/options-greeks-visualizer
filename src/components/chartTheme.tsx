@@ -1,33 +1,29 @@
-/** Shared Recharts styling + one canonical color per Greek, used everywhere. */
+/** Shared Recharts styling + one canonical color per Greek. */
 import { fmt } from "../lib/format";
 
 export const CHART = {
-  grid: "#171b23",
-  axis: "#29303c",
-  tick: { fill: "#6b7688", fontSize: 10, fontFamily: "IBM Plex Mono, monospace" },
-  accent: "#f0b429",
-  info: "#4d9fec",
-  up: "#2ebd85",
-  down: "#f6465d",
-  dim: "#838d9e",
-  faint: "#515a69",
+  grid: "#1e1e1e",
+  axis: "#2a2a2a",
+  tick: { fill: "#6a6a6a", fontSize: 10, fontFamily: "IBM Plex Mono, monospace" },
+  accent: "#e07b20",
+  info: "#6b8cae",
+  up: "#3d9970",
+  down: "#c94a4a",
+  dim: "#8a8a8a",
+  faint: "#5c5c5c",
 };
 
-/**
- * Canonical identity color for each quantity. Reused by the Greek curves,
- * the surface selector, and every legend so the color coding is a single
- * consistent system rather than ad-hoc per chart.
- */
+/** Restrained palette: no rainbow. Each Greek gets a distinct but muted hue. */
 export const GK: Record<string, string> = {
-  price: "#f0b429",
-  delta: "#4d9fec",
-  gamma: "#2ebd85",
-  theta: "#f6465d",
-  vega: "#a78bfa",
-  rho: "#e0823d",
-  vanna: "#38bdf8",
-  charm: "#f472b6",
-  vomma: "#eab308",
+  price: "#e07b20",
+  delta: "#6b8cae",
+  gamma: "#7a9e7e",
+  theta: "#c94a4a",
+  vega: "#7a8eb0",
+  rho: "#a08060",
+  vanna: "#8a9ab0",
+  charm: "#6a8a6e",
+  vomma: "#b8956a",
 };
 
 interface TipProps {
@@ -38,17 +34,16 @@ interface TipProps {
   dp?: number;
 }
 
-/** Dark tooltip panel used by every chart. */
 export function ChartTip({ active, label, payload, labelPrefix = "S", dp = 4 }: TipProps) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-edge2 bg-panel/95 px-2.5 py-1.5 shadow-xl shadow-black/60 backdrop-blur-sm">
+    <div className="border border-edge2 bg-panel px-2.5 py-1.5">
       <div className="tnum mb-1 text-[10px] text-faint">
         {labelPrefix} {typeof label === "number" ? fmt(label, 2) : label}
       </div>
       {payload.map((p, i) => (
         <div key={i} className="tnum flex items-center gap-2 text-[11px] leading-4">
-          <span className="inline-block h-[7px] w-[7px] rounded-full" style={{ background: p.color }} />
+          <span className="inline-block h-[6px] w-[6px]" style={{ background: p.color }} />
           <span className="text-dim">{p.name}</span>
           <span className="ml-auto pl-4 text-txt">
             {typeof p.value === "number" ? fmt(p.value, dp) : p.value}

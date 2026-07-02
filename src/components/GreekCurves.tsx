@@ -34,11 +34,6 @@ const PANELS: { key: keyof Omit<Row, "S">; title: string; symbol: string; unit: 
   { key: "rho", title: "Rho", symbol: "ρ", unit: "/1%", color: GK.rho },
 ];
 
-/**
- * Small-multiples grid: each Greek plotted against spot with the live spot
- * marked. All curves share one computed sweep (greeks() returns everything
- * in a single pass per point).
- */
 export function GreekCurves({ inputs }: { inputs: AppInputs }) {
   const T = inputs.days / 365;
 
@@ -81,23 +76,17 @@ export function GreekCurves({ inputs }: { inputs: AppInputs }) {
   }, [inputs.S, inputs.K, T, inputs.r, inputs.sigma, inputs.q, inputs.type]);
 
   return (
-    <div className="grid grid-cols-2 gap-2.5 xl:grid-cols-3">
+    <div className="grid grid-cols-2 gap-2 xl:grid-cols-3">
       {PANELS.map((p) => (
         <div key={p.key} className="card overflow-hidden">
-          <div className="flex items-center justify-between border-b border-edge px-3 py-2">
+          <div className="flex items-center justify-between border-b border-edge px-3 py-1.5">
             <div className="flex items-center gap-2">
-              <span
-                className="flex h-5 w-5 items-center justify-center rounded font-mono text-[11px]"
-                style={{ color: p.color, background: `${p.color}18` }}
-              >
-                {p.symbol}
-              </span>
+              <span className="h-3 w-0.5" style={{ background: p.color }} />
+              <span className="font-mono text-[10px] text-faint">{p.symbol}</span>
               <span className="lbl">{p.title}</span>
               {p.unit && <span className="text-[9px] text-faint">{p.unit}</span>}
             </div>
-            <span className="tnum text-[12px] font-medium" style={{ color: p.color }}>
-              {fmt(current[p.key], 4)}
-            </span>
+            <span className="tnum text-[11px] font-medium text-txt">{fmt(current[p.key], 4)}</span>
           </div>
           <div className="h-[168px] px-1 pt-2">
             <ResponsiveContainer width="100%" height="100%">
@@ -132,17 +121,17 @@ export function GreekCurves({ inputs }: { inputs: AppInputs }) {
                   dataKey={p.key}
                   name={p.title}
                   stroke={p.color}
-                  strokeWidth={1.6}
+                  strokeWidth={1.5}
                   dot={false}
                   isAnimationActive={false}
                 />
                 <ReferenceDot
                   x={current.S}
                   y={current[p.key]}
-                  r={3.5}
+                  r={3}
                   fill={p.color}
-                  stroke="#0a0e14"
-                  strokeWidth={1.5}
+                  stroke={CHART.grid}
+                  strokeWidth={1}
                 />
               </LineChart>
             </ResponsiveContainer>

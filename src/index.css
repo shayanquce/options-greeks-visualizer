@@ -1,28 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
 
-  /* --- surfaces: cool near-black, layered by elevation --- */
-  --color-term: #0a0b0f; /* app background */
-  --color-panel: #0f1116; /* card background */
-  --color-panel2: #14171e; /* inputs, inset wells */
-  --color-panel3: #1b1f28; /* hover / raised */
-  --color-edge: #1b1f28; /* hairline borders */
-  --color-edge2: #29303c; /* stronger borders */
+  --color-term: #0c0c0c;
+  --color-panel: #141414;
+  --color-panel2: #1a1a1a;
+  --color-panel3: #222222;
+  --color-edge: #2a2a2a;
+  --color-edge2: #383838;
 
-  /* --- text --- */
-  --color-txt: #e7e9ee; /* primary */
-  --color-dim: #838d9e; /* secondary labels */
-  --color-faint: #515a69; /* tertiary / captions */
+  --color-txt: #d4d4d4;
+  --color-dim: #8a8a8a;
+  --color-faint: #5c5c5c;
 
-  /* --- signature + directional --- */
-  --color-accent: #f0b429; /* gold: the live/active signal */
-  --color-accent2: #ffcf5c; /* lighter gold for highlights */
-  --color-up: #2ebd85; /* gains / long / calls */
-  --color-down: #f6465d; /* losses / short / puts */
-  --color-info: #4d9fec; /* secondary series */
+  --color-accent: #e07b20;
+  --color-accent2: #f09540;
+  --color-up: #3d9970;
+  --color-down: #c94a4a;
+  --color-info: #6b8cae;
 }
 
 html,
@@ -31,33 +28,20 @@ body,
   height: 100%;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-* {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 body {
-  background:
-    radial-gradient(1200px 600px at 78% -8%, rgba(240, 180, 41, 0.05), transparent 60%),
-    radial-gradient(900px 500px at 0% 100%, rgba(77, 159, 236, 0.04), transparent 55%),
-    var(--color-term);
-  background-attachment: fixed;
+  background: var(--color-term);
   color: var(--color-txt);
   font-family: var(--font-sans);
   font-size: 13px;
-  letter-spacing: -0.006em;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: rgba(240, 180, 41, 0.28);
+  background: rgba(224, 123, 32, 0.25);
 }
 
-/* Tabular monospace numerals: every price/greek uses this */
 .tnum {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
@@ -65,26 +49,19 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* Small-caps section label, used everywhere for consistency */
 .lbl {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.13em;
+  font-size: 11px;
+  font-weight: 500;
   color: var(--color-dim);
 }
 
-/* Card surface with a whisper of top-edge highlight for depth */
 .card {
   background: var(--color-panel);
   border: 1px solid var(--color-edge);
-  border-radius: 6px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.022),
-    0 1px 2px rgba(0, 0, 0, 0.35);
+  border-radius: 2px;
 }
 
-/* --- range sliders: filled gold track --- */
+/* range sliders */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -94,8 +71,8 @@ input[type="range"] {
   cursor: pointer;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-  height: 3px;
-  border-radius: 3px;
+  height: 2px;
+  border-radius: 0;
   background: linear-gradient(
     to right,
     var(--color-accent) 0,
@@ -107,43 +84,37 @@ input[type="range"]::-webkit-slider-runnable-track {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  margin-top: -5.5px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #14171e;
-  border: 2px solid var(--color-accent);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition:
-    transform 90ms ease,
-    box-shadow 90ms ease;
+  margin-top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--color-panel2);
+  border: 1px solid var(--color-accent);
 }
 input[type="range"]:hover::-webkit-slider-thumb {
-  transform: scale(1.18);
-  box-shadow: 0 0 0 4px rgba(240, 180, 41, 0.14);
+  background: var(--color-accent);
 }
 input[type="range"]:active::-webkit-slider-thumb {
   background: var(--color-accent);
 }
 input[type="range"]::-moz-range-track {
-  height: 3px;
-  border-radius: 3px;
+  height: 2px;
+  border-radius: 0;
   background: var(--color-edge2);
 }
 input[type="range"]::-moz-range-progress {
-  height: 3px;
-  border-radius: 3px;
+  height: 2px;
+  border-radius: 0;
   background: var(--color-accent);
 }
 input[type="range"]::-moz-range-thumb {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: #14171e;
-  border: 2px solid var(--color-accent);
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--color-panel2);
+  border: 1px solid var(--color-accent);
 }
 
-/* hide number input spinners */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -154,54 +125,21 @@ input[type="number"] {
   appearance: textfield;
 }
 
-/* refined native selects */
 select {
   background-image: none;
 }
 
-/* slim scrollbars */
 ::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-edge2);
-  border-radius: 6px;
-  border: 2px solid var(--color-term);
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #333c49;
-}
-
-/* live pulse dot */
-@keyframes livepulse {
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(46, 189, 133, 0.5);
-  }
-  50% {
-    opacity: 0.75;
-    box-shadow: 0 0 0 4px rgba(46, 189, 133, 0);
-  }
-}
-.livedot {
-  animation: livepulse 2.4s ease-in-out infinite;
-}
-
-@keyframes fadein {
-  from {
-    opacity: 0;
-    transform: translateY(3px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.fadein {
-  animation: fadein 0.22s ease-out;
+  background: #4a4a4a;
 }

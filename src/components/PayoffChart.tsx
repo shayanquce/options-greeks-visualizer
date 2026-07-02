@@ -20,8 +20,8 @@ const TONE: Record<string, string> = { accent: "text-accent", txt: "text-txt", d
 
 function Stat({ label, value, tone }: { label: string; value: string; tone: keyof typeof TONE }) {
   return (
-    <div className="flex items-baseline gap-1.5 rounded border border-edge bg-panel2/50 px-2 py-1">
-      <span className="text-[9px] uppercase tracking-wider text-faint">{label}</span>
+    <div className="flex items-baseline gap-1.5 border border-edge bg-panel2 px-2 py-0.5">
+      <span className="text-[10px] text-faint">{label}</span>
       <span className={`tnum text-[11px] font-medium ${TONE[tone]}`}>{value}</span>
     </div>
   );
@@ -170,7 +170,7 @@ export function PayoffChart({ inputs }: { inputs: AppInputs }) {
               isAnimationActive={false}
             />
             <ReferenceLine x={inputs.S} stroke={CHART.faint} strokeDasharray="4 3" />
-            <ReferenceDot x={inputs.S} y={0} r={3.5} fill={CHART.info} stroke="#0a0e14" strokeWidth={1.5} />
+            <ReferenceDot x={inputs.S} y={0} r={3} fill={CHART.info} stroke={CHART.grid} strokeWidth={1} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
