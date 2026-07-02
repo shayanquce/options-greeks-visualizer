@@ -23,7 +23,7 @@ function Cell({ label, symbol, value, unit, dp = 4, signed }: CellProps) {
   return (
     <div className="flex min-w-0 flex-1 flex-col justify-center px-3 py-2">
       <div className="flex items-center gap-1 whitespace-nowrap">
-        {symbol && <span className="font-mono text-[10px] text-faint">{symbol}</span>}
+        {symbol && <span className="font-serif text-[13px] italic text-faint">{symbol}</span>}
         <span className="lbl text-[10px]">{label}</span>
       </div>
       <div className={`tnum mt-0.5 whitespace-nowrap text-[13px] font-medium leading-none ${color}`}>

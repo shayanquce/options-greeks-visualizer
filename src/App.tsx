@@ -89,6 +89,7 @@ export default function App() {
           <div className="text-[11px] text-dim">
             Option prices and risk under Black-Scholes-Merton
           </div>
+          <div className="mt-0.5 text-[10px] text-faint">Made by Shayan Mardaneh</div>
         </div>
 
         <button

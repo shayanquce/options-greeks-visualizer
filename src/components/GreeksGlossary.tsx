@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { GK } from "./chartTheme";
 import { IconChevron } from "./icons";
 
@@ -9,8 +9,17 @@ interface Entry {
   order: "Primary" | "Higher";
   color: string;
   summary: string;
-  detail: string;
+  detail: ReactNode;
   example: string;
+}
+
+/** e^x with a real superscript exponent, for inline use in prose. */
+function ExpOf({ children }: { children: ReactNode }) {
+  return (
+    <>
+      e<sup>{children}</sup>
+    </>
+  );
 }
 
 const ENTRIES: Entry[] = [
@@ -21,8 +30,18 @@ const ENTRIES: Entry[] = [
     order: "Primary",
     color: GK.delta,
     summary: "How much the option price moves when the stock moves $1.",
-    detail:
-      "Delta is the first derivative of option value with respect to spot. For a call it ranges from 0 (far out of the money) to 1 (deep in the money); for a put, from 0 to −1. Traders use delta as a hedge ratio: since one listed contract covers 100 shares, a call with delta 0.40 has the same first-order exposure as 40 shares of stock. Delta is often quoted as a rough proxy for the chance of expiring in the money, but the exact risk-neutral exercise probability is N(d2); delta itself is e^(−qT)·N(d1), which sits slightly above it. That is also why an at-the-money call's delta is a little over 0.50, not exactly 0.50.",
+    detail: (
+      <>
+        Delta is the first derivative of option value with respect to spot. For a call it ranges
+        from 0 (far out of the money) to 1 (deep in the money); for a put, from 0 to −1. Traders
+        use delta as a hedge ratio: since one listed contract covers 100 shares, a call with
+        delta 0.40 has the same first-order exposure as 40 shares of stock. Delta is often quoted
+        as a rough proxy for the chance of expiring in the money, but the exact risk-neutral
+        exercise probability is N(d₂); delta itself is <ExpOf>−qT</ExpOf>·N(d₁), which sits
+        slightly above it. That is also why an at-the-money call's delta is a little over 0.50,
+        not exactly 0.50.
+      </>
+    ),
     example:
       "You own a call with delta 0.55. The stock rises $2. The option price should increase by about 0.55 × $2 = $1.10 (before other effects). To stay delta-neutral, you would short 55 shares against the contract.",
   },
@@ -182,9 +201,11 @@ function GreekCard({ entry: e }: { entry: Entry }) {
         <span className="mt-0.5 h-3 w-0.5 shrink-0" style={{ background: e.color }} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            {e.symbol && <span className="font-mono text-[11px] text-faint">{e.symbol}</span>}
+            {e.symbol && (
+              <span className="font-serif text-[13px] italic text-faint">{e.symbol}</span>
+            )}
             <span className="text-[11px] font-medium text-txt">{e.name}</span>
-            <span className="tnum ml-auto text-[10px] text-faint">{e.formula}</span>
+            <span className="ml-auto font-serif text-[11px] italic text-faint">{e.formula}</span>
           </div>
           <p className="mt-1 text-[11px] leading-[1.5] text-dim">{e.summary}</p>
         </div>

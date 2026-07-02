@@ -41,7 +41,7 @@ function SliderRow({ label, symbol, hint, value, min, max, step, dp, scale = 1, 
     <div className="px-3 py-2">
       <div className="flex items-center justify-between">
         <div className="flex items-baseline gap-1.5">
-          <span className="font-mono text-[10px] text-faint">{symbol}</span>
+          <span className="font-serif text-[13px] italic text-faint">{symbol}</span>
           <span className="text-[11px] text-txt" title={hint}>
             {label}
           </span>

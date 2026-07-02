@@ -82,7 +82,7 @@ export function GreekCurves({ inputs }: { inputs: AppInputs }) {
           <div className="flex items-center justify-between border-b border-edge px-3 py-1.5">
             <div className="flex items-center gap-2">
               <span className="h-3 w-0.5" style={{ background: p.color }} />
-              <span className="font-mono text-[10px] text-faint">{p.symbol}</span>
+              <span className="font-serif text-[13px] italic text-faint">{p.symbol}</span>
               <span className="lbl">{p.title}</span>
               {p.unit && <span className="text-[9px] text-faint">{p.unit}</span>}
             </div>
