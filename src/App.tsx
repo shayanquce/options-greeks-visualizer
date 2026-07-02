@@ -8,8 +8,10 @@ import { PayoffChart } from "./components/PayoffChart";
 import { GreekSurface } from "./components/GreekSurface";
 import { TimeDecay } from "./components/TimeDecay";
 import { StrategyBuilder } from "./components/StrategyBuilder";
-import { IconClock, IconCurves, IconGrid, IconLayers, IconPayoff } from "./components/icons";
+import { IconClock, IconCurves, IconGrid, IconHelp, IconLayers, IconLinkedIn, IconPayoff } from "./components/icons";
 import { GreeksGlossary } from "./components/GreeksGlossary";
+import { HelpModal } from "./components/HelpModal";
+import { Logo } from "./components/Logo";
 import type { JSX } from "react";
 
 const TABS: { id: Tab; icon: (p: { className?: string }) => JSX.Element }[] = [
@@ -21,14 +23,31 @@ const TABS: { id: Tab; icon: (p: { className?: string }) => JSX.Element }[] = [
 ];
 type Tab = "Greek Curves" | "Payoff" | "Surface" | "Time Decay" | "Strategy";
 
+const TAB_HINTS: Record<Tab, string> = {
+  "Greek Curves":
+    "Each chart shows one Greek vs stock price. Move Spot in the left panel and watch the dot travel along the curve.",
+  Payoff:
+    "Profit or loss for owning one option. Solid line = at expiry; dashed = today (still has time value).",
+  Surface:
+    "Heatmap of one Greek across stock price and time. Pick a Greek above the chart, then hover for exact values.",
+  "Time Decay":
+    "Hit play to watch the option lose time value as expiry approaches. Drag the slider to jump to any day.",
+  Strategy:
+    "Combine multiple options into one position. Pick a preset or build your own legs and see net Greeks and P&L.",
+};
+
 function MoneynessBadge({ m }: { m: number }) {
-  const [label, cls] =
+  const [label, cls, title] =
     m > 1.02
-      ? ["ITM", "text-up"]
+      ? ["ITM", "text-up", "In the money: the option has intrinsic value"]
       : m < 0.98
-        ? ["OTM", "text-down"]
-        : ["ATM", "text-accent"];
-  return <span className={`text-[10px] font-medium ${cls}`}>{label}</span>;
+        ? ["OTM", "text-down", "Out of the money: no intrinsic value yet"]
+        : ["ATM", "text-accent", "At the money: spot is near the strike"];
+  return (
+    <span className={`text-[10px] font-medium ${cls}`} title={title}>
+      {label}
+    </span>
+  );
 }
 
 export default function App() {
@@ -42,6 +61,7 @@ export default function App() {
     type: "call",
   });
   const [tab, setTab] = useState<Tab>("Greek Curves");
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const patch = (p: Partial<AppInputs>) => setInputs((cur) => ({ ...cur, ...p }));
 
@@ -63,15 +83,21 @@ export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="flex items-center gap-3 border-b border-edge bg-panel px-4 py-2">
-        <div className="flex h-7 w-7 items-center justify-center border border-accent bg-panel2">
-          <span className="font-mono text-[14px] font-semibold leading-none text-accent">Δ</span>
-        </div>
+        <Logo className="shrink-0 text-accent" />
         <div className="leading-tight">
           <h1 className="text-[13px] font-semibold text-txt">Options Greeks</h1>
-          <div className="text-[10px] text-faint">Black-Scholes-Merton · European</div>
+          <div className="text-[10px] text-faint">Learn how option prices and risk change with the market</div>
         </div>
 
-        <div className="tnum ml-6 hidden items-center gap-3 border border-edge bg-panel2 px-3 py-1 text-[11px] lg:flex">
+        <button
+          onClick={() => setHelpOpen(true)}
+          className="ml-4 flex items-center gap-1.5 border border-edge px-2.5 py-1 text-[10px] text-dim hover:border-edge2 hover:bg-panel2 hover:text-txt"
+        >
+          <IconHelp className="text-faint" />
+          How it works
+        </button>
+
+        <div className="tnum ml-auto hidden items-center gap-3 border border-edge bg-panel2 px-3 py-1 text-[11px] lg:flex">
           <span className="text-dim">
             {inputs.type === "call" ? (
               <span className="text-up">CALL</span>
@@ -121,6 +147,10 @@ export default function App() {
             ))}
           </nav>
 
+          <div className="border-b border-edge bg-panel2 px-3 py-1.5 text-[10px] leading-[1.5] text-dim">
+            {TAB_HINTS[tab]}
+          </div>
+
           <div className="min-h-0 flex-1 overflow-y-auto p-3">
             {tab === "Greek Curves" && <GreekCurves inputs={inputs} />}
             {tab === "Payoff" && <PayoffChart inputs={inputs} />}
@@ -131,12 +161,21 @@ export default function App() {
         </main>
       </div>
 
-      <footer className="flex items-center gap-2 border-t border-edge px-4 py-1.5 text-[10px] text-faint">
-        <span>Constant σ, r, q · no transaction costs · θ per calendar day, ν &amp; ρ per 1%.</span>
-        <span className="ml-auto">Educational tool, not investment advice.</span>
+      <footer className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-edge px-4 py-2 text-[10px] text-faint">
+        <span>Educational tool, not investment advice.</span>
+        <a
+          href="https://www.linkedin.com/in/shayanmardaneh"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ml-auto flex items-center gap-1.5 text-dim hover:text-txt"
+        >
+          Made by Shayan Mardaneh
+          <IconLinkedIn className="text-info" />
+        </a>
       </footer>
 
       <GreeksGlossary />
+      <HelpModal open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
   );
 }

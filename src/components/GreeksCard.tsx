@@ -38,8 +38,9 @@ function PriceCell({ value }: { value: number }) {
   const v = useAnimatedNumber(value);
   return (
     <div className="flex w-[116px] shrink-0 flex-col justify-center border-r border-edge px-3 py-2">
-      <div className="lbl text-[10px]">Theo value</div>
+      <div className="lbl text-[10px]">Option price</div>
       <div className="tnum mt-0.5 text-[18px] font-semibold leading-none text-txt">{fmt(v, 4)}</div>
+      <div className="mt-0.5 text-[9px] text-faint">model value</div>
     </div>
   );
 }

@@ -16,6 +16,7 @@ export interface AppInputs {
 interface SliderRowProps {
   label: string;
   symbol: string;
+  hint: string;
   value: number;
   min: number;
   max: number;
@@ -26,7 +27,7 @@ interface SliderRowProps {
   onChange: (v: number) => void;
 }
 
-function SliderRow({ label, symbol, value, min, max, step, dp, scale = 1, unit, onChange }: SliderRowProps) {
+function SliderRow({ label, symbol, hint, value, min, max, step, dp, scale = 1, unit, onChange }: SliderRowProps) {
   const [text, setText] = useState<string | null>(null);
   const shown = text ?? fmt(value * scale, dp);
   const pct = ((value - min) / (max - min)) * 100;
@@ -42,7 +43,9 @@ function SliderRow({ label, symbol, value, min, max, step, dp, scale = 1, unit, 
       <div className="flex items-center justify-between">
         <div className="flex items-baseline gap-1.5">
           <span className="font-mono text-[10px] text-faint">{symbol}</span>
-          <span className="text-[11px] text-txt">{label}</span>
+          <span className="text-[11px] text-txt" title={hint}>
+            {label}
+          </span>
         </div>
         <div className="flex items-baseline gap-1 border border-edge bg-term px-1.5 py-0.5 focus-within:border-edge2">
           <input
@@ -96,8 +99,12 @@ export function InputsPanel({ inputs, onChange }: Props) {
 
   return (
     <div className="flex h-full flex-col">
+      <p className="border-b border-edge px-3 py-2 text-[10px] leading-[1.5] text-faint">
+        Adjust the contract here. Start with spot, strike, expiry, and volatility.
+      </p>
+
       <div className="p-3 pb-2">
-        <div className="lbl mb-1.5">Contract</div>
+        <div className="lbl mb-1.5">Call or put</div>
         <div className="flex border border-edge">
           {(["call", "put"] as const).map((t) => (
             <button
@@ -118,12 +125,12 @@ export function InputsPanel({ inputs, onChange }: Props) {
       </div>
 
       <div className="flex-1 divide-y divide-edge overflow-y-auto border-y border-edge">
-        <SliderRow label="Spot" symbol="S" value={inputs.S} min={1} max={400} step={0.5} dp={2} onChange={(S) => onChange({ S })} />
-        <SliderRow label="Strike" symbol="K" value={inputs.K} min={1} max={400} step={0.5} dp={2} onChange={(K) => onChange({ K })} />
-        <SliderRow label="Expiry" symbol="T" value={inputs.days} min={1} max={730} step={1} dp={0} unit="d" onChange={(days) => onChange({ days: Math.round(days) })} />
-        <SliderRow label="Volatility" symbol="σ" value={inputs.sigma} min={0.01} max={1.5} step={0.005} dp={1} scale={100} unit="%" onChange={(sigma) => onChange({ sigma })} />
-        <SliderRow label="Risk-free" symbol="r" value={inputs.r} min={0} max={0.12} step={0.0005} dp={2} scale={100} unit="%" onChange={(r) => onChange({ r })} />
-        <SliderRow label="Div yield" symbol="q" value={inputs.q} min={0} max={0.08} step={0.0005} dp={2} scale={100} unit="%" onChange={(q) => onChange({ q })} />
+        <SliderRow label="Spot price" symbol="S" hint="Current stock price" value={inputs.S} min={1} max={400} step={0.5} dp={2} onChange={(S) => onChange({ S })} />
+        <SliderRow label="Strike" symbol="K" hint="Exercise price in the contract" value={inputs.K} min={1} max={400} step={0.5} dp={2} onChange={(K) => onChange({ K })} />
+        <SliderRow label="Days to expiry" symbol="T" hint="Calendar days until the option expires" value={inputs.days} min={1} max={730} step={1} dp={0} unit="d" onChange={(days) => onChange({ days: Math.round(days) })} />
+        <SliderRow label="Volatility" symbol="σ" hint="Expected annual price swing; higher = pricier option" value={inputs.sigma} min={0.01} max={1.5} step={0.005} dp={1} scale={100} unit="%" onChange={(sigma) => onChange({ sigma })} />
+        <SliderRow label="Interest rate" symbol="r" hint="Risk-free rate (advanced; small effect on short options)" value={inputs.r} min={0} max={0.12} step={0.0005} dp={2} scale={100} unit="%" onChange={(r) => onChange({ r })} />
+        <SliderRow label="Dividend yield" symbol="q" hint="Annual dividend yield on the stock" value={inputs.q} min={0} max={0.08} step={0.0005} dp={2} scale={100} unit="%" onChange={(q) => onChange({ q })} />
       </div>
 
       <div className="p-3">
@@ -150,15 +157,18 @@ export function InputsPanel({ inputs, onChange }: Props) {
             → σ
           </button>
         </div>
-        <div className="mt-1.5 flex h-4 items-center">
-          {mktPrice === "" ? (
-            <span className="text-[10px] text-faint">Enter market price to solve for σ</span>
-          ) : iv === null ? (
-            <span className="text-[10px] text-down">No solution within no-arb bounds</span>
-          ) : (
-            <span className="tnum text-[11px] text-txt">σ = {fmtPct(iv, 2)}</span>
-          )}
-        </div>
+        <p className="mt-1 text-[10px] leading-[1.4] text-faint">
+          Know the market price? Enter it here to find implied volatility.
+        </p>
+        {mktPrice !== "" && (
+          <div className="mt-1">
+            {iv === null ? (
+              <span className="text-[10px] text-down">No solution within no-arb bounds</span>
+            ) : (
+              <span className="tnum text-[11px] text-txt">Implied σ = {fmtPct(iv, 2)}</span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
