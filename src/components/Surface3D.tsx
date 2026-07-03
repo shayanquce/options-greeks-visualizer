@@ -24,11 +24,12 @@ const FLOOR = -ZH / 2;
 const CANVAS_H = 480;
 const INITIAL_VIEW = { yaw: -0.75, pitch: 0.42 };
 
-const COL_EDGE = "#2a2a2a";
-const COL_TICK = "#6a6a6a";
-const COL_TITLE = "#5c5c5c";
-const COL_GUIDE = "rgba(212,212,212,0.35)";
-const COL_ACCENT = "#e07b20";
+/* Print-palette inks, matched to the 2D heatmap view */
+const COL_EDGE = "#bcb29a";
+const COL_TICK = "#7d7460";
+const COL_TITLE = "#978e79";
+const COL_GUIDE = "rgba(33,29,18,0.45)";
+const COL_ACCENT = "#a4502a";
 const FONT_TICK = "9px 'IBM Plex Mono', monospace";
 
 interface Quad {
@@ -191,7 +192,8 @@ export function Surface3D({
       .sort((u, v) => v.depth - u.depth);
     for (const { i } of order) {
       const q = quads[i];
-      const f = shadeFactor(q.normal, yaw, pitch);
+      // higher ambient on the paper-light theme: gentle hillshade, not murk
+      const f = shadeFactor(q.normal, yaw, pitch, 0.72);
       const col = `rgb(${Math.round(q.rgb[0] * f)},${Math.round(q.rgb[1] * f)},${Math.round(q.rgb[2] * f)})`;
       ctx.fillStyle = col;
       ctx.strokeStyle = col; // stroke in the fill color seals antialiasing seams
@@ -223,7 +225,7 @@ export function Surface3D({
       ctx.stroke();
       ctx.setLineDash([]);
       const endI = rK * COLS + (COLS - 1);
-      ctx.fillStyle = "#8a8a8a";
+      ctx.fillStyle = "#5f584a";
       ctx.font = FONT_TICK;
       ctx.textAlign = "left";
       ctx.fillText(`K ${fmt(strike, 0)}`, px[endI] + 5, py[endI] - 3);
@@ -231,7 +233,7 @@ export function Surface3D({
 
     // ----- zero plane outline for signed Greeks -----
     if (diverging && zeroZ > FLOOR + 0.01 && zeroZ < FLOOR + ZH - 0.01) {
-      ctx.strokeStyle = "rgba(212,212,212,0.14)";
+      ctx.strokeStyle = "rgba(33,29,18,0.18)";
       ctx.setLineDash([2, 4]);
       ctx.beginPath();
       const zc = [
