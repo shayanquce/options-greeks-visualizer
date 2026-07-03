@@ -3,6 +3,7 @@ import { greeks, type Greeks } from "../lib/blackScholes";
 import { divColor, legendGradient, seqColor } from "../lib/colorScale";
 import { fmt, fmtTick } from "../lib/format";
 import type { AppInputs } from "./InputsPanel";
+import { Surface3D } from "./Surface3D";
 
 type GreekKey = keyof Greeks;
 
@@ -35,6 +36,7 @@ const MR = 8;
  */
 export function GreekSurface({ inputs }: { inputs: AppInputs }) {
   const [sel, setSel] = useState<GreekKey>("gamma");
+  const [mode, setMode] = useState<"2d" | "3d">("2d");
   const [hover, setHover] = useState<{ c: number; r: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -122,8 +124,43 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
             </button>
           );
         })}
+
+        {/* 2D / 3D view toggle */}
+        <div className="ml-auto flex border border-edge2" role="group" aria-label="surface view mode">
+          {(["2d", "3d"] as const).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              aria-pressed={mode === m}
+              className={`px-2.5 py-0.5 font-mono text-[10px] uppercase ${
+                mode === m ? "bg-panel2 text-accent" : "text-dim hover:text-txt"
+              }`}
+            >
+              {m}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {mode === "3d" && (
+        <div className="p-2">
+          <Surface3D
+            grid={grid}
+            spots={spots}
+            dayArr={dayArr}
+            vMin={vMin}
+            vMax={vMax}
+            diverging={diverging}
+            label={opt.label}
+            unit={opt.unit}
+            liveS={inputs.S}
+            liveDays={inputs.days}
+            strike={inputs.K}
+          />
+        </div>
+      )}
+
+      {mode === "2d" && (
       <div className="relative p-2">
         <svg
           ref={svgRef}
@@ -247,6 +284,7 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
           )}
         </div>
       </div>
+      )}
 
       {/* legend */}
       <div className="flex items-center gap-3 border-t border-edge px-3 py-2">

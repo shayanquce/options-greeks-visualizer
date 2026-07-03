@@ -14,8 +14,11 @@ reference values.
 - Fully reactive: every chart and readout updates live as inputs move
 - **Greek curves**: small-multiples of each Greek vs. spot, live spot marked
 - **Payoff diagram**: P&L at expiry vs. today's value curve, profit/loss zones shaded
-- **Greek surface**: heatmap of any Greek over spot x time-to-expiry (watch the
-  gamma ridge sharpen into expiry)
+- **Greek surface**: any Greek over spot x time-to-expiry, as a 2D heatmap or a
+  rotatable 3D surface (toggle in the header; drag to orbit, double-click to reset).
+  The 3D view is a hand-rolled canvas pipeline (orbit camera, painter's-algorithm
+  depth sort, Lambert shading) with no WebGL dependency; the projection math lives
+  in `src/lib/surface3d.ts` and is unit-tested
 - **Time decay animation**: plays the value curve collapsing onto intrinsic value
 - **Strategy builder**: straddles, spreads, covered calls, protective puts, iron
   condors, with combined payoff and net position Greeks; legs fully editable
@@ -105,6 +108,8 @@ src/
     strategies.ts         multi-leg positions: payoff, cost, additive net Greeks
     blackScholes.test.ts  unit tests: Hull reference values, put-call parity,
                           analytic-vs-finite-difference Greeks, IV round-trips
+    surface3d.ts          3D math for the surface view: orbit rotation, projection,
+                          Lambert shading (unit-tested in surface3d.test.ts)
     format.ts / colorScale.ts
   components/             UI only, no math lives here (includes GreeksGlossary.tsx)
   hooks/useAnimatedNumber.ts
