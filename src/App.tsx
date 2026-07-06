@@ -22,7 +22,7 @@ const TAB_HINTS: Record<Tab, string> = {
   Payoff:
     "Profit or loss for owning one option. Solid line = at expiry; dashed = today (still has time value).",
   Surface:
-    "Heatmap of one Greek across stock price and time. Pick a Greek above the chart, then hover for exact values.",
+    "Heatmap of one Greek across stock price and time. Pick a Greek above the chart, then hover for exact values. Use the View toggle on the right to switch to a rotatable 3D surface.",
   "Time Decay":
     "Hit play to watch the option lose time value as expiry approaches. Drag the slider to jump to any day.",
   Strategy:

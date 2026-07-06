@@ -108,37 +108,47 @@ export function GreekSurface({ inputs }: { inputs: AppInputs }) {
 
   return (
     <div className="card">
-      <div className="flex flex-wrap items-center gap-1.5 border-b border-edge px-3 py-2.5">
-        <span className="lbl mr-1.5">Surface · Spot × Time</span>
-        {GREEK_OPTS.map((o) => {
-          const on = sel === o.key;
-          return (
-            <button
-              key={o.key}
-              onClick={() => setSel(o.key)}
-              className={`px-2 py-0.5 font-mono text-[10px] ${
-                on ? "bg-panel2 text-txt" : "text-dim hover:bg-panel2 hover:text-txt"
-              }`}
-            >
-              {o.label}
-            </button>
-          );
-        })}
+      <div className="flex items-center gap-2 border-b border-edge px-3 py-2.5">
+        <span className="lbl mr-1 shrink-0">Surface · Spot × Time</span>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {GREEK_OPTS.map((o) => {
+            const on = sel === o.key;
+            return (
+              <button
+                key={o.key}
+                onClick={() => setSel(o.key)}
+                className={`px-2 py-0.5 font-mono text-[10px] ${
+                  on ? "bg-panel2 text-txt" : "text-dim hover:bg-panel2 hover:text-txt"
+                }`}
+              >
+                {o.label}
+              </button>
+            );
+          })}
+        </div>
 
-        {/* 2D / 3D view toggle */}
-        <div className="ml-auto flex border border-edge2" role="group" aria-label="surface view mode">
-          {(["2d", "3d"] as const).map((m) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              aria-pressed={mode === m}
-              className={`px-2.5 py-0.5 font-mono text-[10px] uppercase ${
-                mode === m ? "bg-panel2 text-accent" : "text-dim hover:text-txt"
-              }`}
-            >
-              {m}
-            </button>
-          ))}
+        {/* 2D / 3D view toggle: a prominent, labeled segmented control */}
+        <div className="ml-auto flex shrink-0 items-center gap-1.5">
+          <span className="text-[10px] uppercase tracking-wide text-faint">View</span>
+          <div
+            className="flex overflow-hidden rounded-[3px] border border-edge2"
+            role="group"
+            aria-label="surface view mode"
+          >
+            {(["2d", "3d"] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => setMode(m)}
+                aria-pressed={mode === m}
+                title={m === "3d" ? "Rotatable 3D surface" : "Flat 2D heatmap"}
+                className={`px-3 py-1 font-mono text-[11px] font-semibold uppercase ${
+                  mode === m ? "bg-accent text-panel" : "bg-panel text-dim hover:bg-panel2 hover:text-txt"
+                }`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
